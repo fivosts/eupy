@@ -1,0 +1,6 @@
+[submodule "MrCrawley"]
+	path = MrCrawley
+	url = git@github.com:fivosts/MrCrawley.git
+[submodule "hermes"]
+	path = hermes
+	url = git@github.com:fivosts/hermes.git
