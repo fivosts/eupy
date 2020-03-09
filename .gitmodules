@@ -1,0 +1,6 @@
+[submodule "eupy/MrCrawley"]
+	path = eupy/MrCrawley
+	url = git@github.com:fivosts/MrCrawley.git
+[submodule "eupy/hermes"]
+	path = eupy/hermes
+	url = git@github.com:fivosts/hermes.git
