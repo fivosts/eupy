@@ -81,3 +81,38 @@ class AZLyricsSpider(scrapy.Spider):
                                                  song['title'], 
                                                  "\n".join(song['lyrics'])))
         return
+
+"""
+Sample URLS
+-----------
+'https://www.azlyrics.com/p/pinkfloyd.html'
+"""
+
+"""
+Directrory of existing spiders for artists.
+"""
+ARTIST_MAP = {
+                'pink_floyd': "https://www.azlyrics.com/p/pinkfloyd.html"
+            }
+
+def getAvailArtists():
+    return [x for x in ARTIST_MAP]
+    
+"""
+Interface method for AZ Spider
+
+artist: string value of requested artist for crawling
+path: target path to write files
+"""
+def crawl(artist, path=None):
+    if artist not in ARTIST_MAP:
+        logging.error("{} not available for crawling".format(artist))
+        sys.exit(1)
+    process = CrawlerProcess({
+        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+    })
+    process.crawl(spider.AZLyricsSpider, ARTIST_MAP[artist], path)
+    process.start() # the script will block here until the crawling is finished
+    return
+
+
