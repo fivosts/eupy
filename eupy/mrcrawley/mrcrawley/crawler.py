@@ -14,7 +14,7 @@ Sample URLS
 Directrory of existing spiders for artists.
 """
 ARTIST_MAP = {
-				'pink floyd': ("https://www.azlyrics.com/p/pinkfloyd.html", "./dataset/pink_floyd")
+				'pink floyd': "https://www.azlyrics.com/p/pinkfloyd.html"
 			}
 
 # urls: list of starting URL to crawl
