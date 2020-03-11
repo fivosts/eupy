@@ -15,8 +15,9 @@ class AZLyricsSpider(scrapy.Spider):
                         'DOWNLOAD_DELAY': 3
                         }
 
-    def __init__(self, url):
+    def __init__(self, url, artist):
         self.start_urls = [url]
+        self.artist = artist
         self.__excl_str = "<!-- Usage of azlyrics.com content by any third-party lyrics provider is prohibited by our licensing agreement. Sorry about that. -->"
         self.logger.setLevel(logging.INFO)
         return
@@ -67,10 +68,10 @@ class AZLyricsSpider(scrapy.Spider):
                                                 song['title'], 
                                                 "\n".join(song['lyrics'])))
         global _data
-        _data.append(song)
+        _data[self.artist].append(song)
         return
 
-_data = []
+_data = {}
 
 """
 Return raw Data in list
@@ -107,9 +108,15 @@ path: target path to write files
 def crawl(artist):
     if artist not in ARTIST_MAP:
         raise ValueError("{} not available for crawling".format(artist))
+    global _data
+    if artist not in _data:
+        _data[artist] = []
+    else:
+        l.getLogger().warning("Data for {} already exist in buffer.".format(artist))
+        
     process = CrawlerProcess({
         'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
     })
-    process.crawl(AZLyricsSpider, ARTIST_MAP[artist])
+    process.crawl(AZLyricsSpider, ARTIST_MAP[artist], artist)
     process.start() # the script will block here until the crawling is finished
     return
