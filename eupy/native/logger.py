@@ -67,7 +67,17 @@ def initLogger(name):
 	return _logger
 
 def getLogger():
+	global _logger
 	if _logger == None:
 		raise NameError("Logger has not been initialized!")
+	else:
+		return _logger
+
+def initOrGetLogger():
+	global _logger
+	if _logger == None:
+		_logger = Logger("Logger")
+		_logger.warning("Logger has not been explicitly initialized")
+		return _logger
 	else:
 		return _logger
