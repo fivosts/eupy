@@ -63,6 +63,10 @@ class AZLyricsSpider(scrapy.Spider):
         assert title != "" and artist != "", "Title and/or artist fields are empty"
         return artist, title
 
+    """
+    Print to output crawled item
+    Store it in static data variable
+    """
     def __logAndStore(self, song):
         self.logger.info("\n\n{} - {}\n{}\n".format(song['artist'],
                                                 song['title'], 
