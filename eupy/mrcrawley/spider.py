@@ -71,16 +71,6 @@ class AZLyricsSpider(scrapy.Spider):
         _data.append(song)
         return
 
-    def __writeFile(self, song):
-
-        if not os.isdir(self.base_path):
-            os.mkdirs(self.base_path)
-        with open("{}/{}.txt".format(self.base_path, song['title'].replace(" ", "_")), 'w') as f:
-            f.write("{}\n{}\n\n{}".format(song['artist'],
-                                                 song['title'], 
-                                                 "\n".join(song['lyrics'])))
-        return
-
 _data = []
 
 """
