@@ -19,7 +19,7 @@ class AZLyricsSpider(scrapy.Spider):
         self.songs = []
         self.base_path = path
         self.__excl_str = "<!-- Usage of azlyrics.com content by any third-party lyrics provider is prohibited by our licensing agreement. Sorry about that. -->"
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.INFO)
         return
 
     ### Parsing Methods
