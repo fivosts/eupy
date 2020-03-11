@@ -61,9 +61,13 @@ class Logger:
 
 _logger = None
 
-def initLogger(name):
+def initLogger(name, lvl):
+	if lvl:
+		l = logging.DEBUG
+	else:
+		l = logging.INFO
 	global _logger
-	_logger = Logger(name)
+	_logger = Logger(name, level = l)
 	return _logger
 
 def getLogger():
