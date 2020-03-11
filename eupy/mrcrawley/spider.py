@@ -114,5 +114,3 @@ def crawl(artist, path=None):
     process.crawl(AZLyricsSpider, ARTIST_MAP[artist], path)
     process.start() # the script will block here until the crawling is finished
     return
-
-
