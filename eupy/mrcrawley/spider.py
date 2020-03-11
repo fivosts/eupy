@@ -74,18 +74,21 @@ class AZLyricsSpider(scrapy.Spider):
 _data = {}
 
 """
-Return raw Data in list
+Return all raw Data.
 """
 def getData():
     global _data
     return _data
 
+"""
+Return raw Data for artist.
+"""
 def getArtistData(artist)
     global _data
     return _data[artist]
 
 """
-Return formatted data to str, ready to be written in file
+Return formatted data to str, ready to be written in file.
 """
 def getArtistDataStr():
     global _data
