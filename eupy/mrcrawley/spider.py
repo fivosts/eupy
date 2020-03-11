@@ -77,14 +77,21 @@ _data = {}
 Return raw Data in list
 """
 def getData():
+    global _data
     return _data
+
+def getArtistData(artist)
+    global _data
+    return _data[artist]
 
 """
 Return formatted data to str, ready to be written in file
 """
-def getDataStr():
-    return ["{}\n{}\n\n{}".format(x['artist'], x['title'], "\n".join(x['lyrics']))
-                for x in _data]
+def getArtistDataStr():
+    global _data
+    for ar in _data:
+        return ["{}\n{}\n\n{}".format(x['artist'], x['title'], "\n".join(x['lyrics']))
+                    for x in _data[ar]]
 
 """
 Directrory of existing spiders for artists.
@@ -113,7 +120,7 @@ def crawl(artist):
         _data[artist] = []
     else:
         l.getLogger().warning("Data for {} already exist in buffer.".format(artist))
-        
+
     process = CrawlerProcess({
         'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
     })
