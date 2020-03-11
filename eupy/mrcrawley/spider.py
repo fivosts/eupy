@@ -3,7 +3,7 @@
 
 import scrapy
 import logging, sys, os
-# import lazytools
+from eupy.native import logger as l
 
 class AZLyricsSpider(scrapy.Spider):
 
@@ -106,8 +106,7 @@ path: target path to write files
 """
 def crawl(artist, path=None):
     if artist not in ARTIST_MAP:
-        logging.error("{} not available for crawling".format(artist))
-        sys.exit(1)
+        raise ValueError("{} not available for crawling".format(artist))
     process = CrawlerProcess({
         'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
     })
