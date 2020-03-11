@@ -87,7 +87,7 @@ def getData():
 """
 Return raw Data for artist.
 """
-def getArtistData(artist)
+def getArtistData(artist):
     global _data
     return _data[artist]
 
