@@ -46,7 +46,7 @@ class Logger:
 	def warn(self, message):
 		self._logger.warn(message)
 
-	def error(self, mesaage):
+	def error(self, message):
 		self._logger.error(message)
 	
 	def critical(self, message):
