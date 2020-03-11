@@ -12,7 +12,6 @@ class Logger:
 		return
 
 	def _configLogger(self, name, level):
-		
 		# create logger
 		self._logger = logging.getLogger(name)
 		self._logger.setLevel(level)
@@ -29,6 +28,7 @@ class Logger:
 
 		# add ch to logger
 		self._logger.addHandler(ch)
+		self.debug("logger.Logger._configLogger()")
 		return
 
 	"""
@@ -53,6 +53,7 @@ class Logger:
 		self._logger.critical(message)
 
 	def shutdown(self):
+		self.debug("eupy.native.logger.Logger.shutdown()")
 		logging.shutdown()
 		return
 
@@ -68,6 +69,8 @@ def initLogger(name, lvl):
 		l = logging.INFO
 	global _logger
 	_logger = Logger(name, level = l)
+	_logger.debug("eupy.native.logger.initLogger()")
+
 	return _logger
 
 def getLogger():
@@ -75,6 +78,7 @@ def getLogger():
 	if _logger == None:
 		raise NameError("Logger has not been initialized!")
 	else:
+		_logger.debug("eupy.native.logger.getLogger()")
 		return _logger
 
 def initOrGetLogger():
@@ -82,6 +86,8 @@ def initOrGetLogger():
 	if _logger == None:
 		_logger = Logger("Logger")
 		_logger.warning("Logger has not been explicitly initialized")
+		_logger.debug("eupy.native.logger.initOrGetLogger()")
 		return _logger
 	else:
+		_logger.debug("eupy.native.logger.initOrGetLogger()")
 		return _logger
