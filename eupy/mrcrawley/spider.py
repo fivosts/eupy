@@ -28,9 +28,9 @@ class AZLyricsSpider(scrapy.Spider):
         for song in response.css(LINK_SELECTOR):
             song_page = song.css('::attr(href)').extract_first()
             yield scrapy.Request(response.urljoin(song_page), 
-                                callback=self.parse_song)
+                                callback=self._parse_song)
 
-    def parse_song(self, response):
+    def _parse_song(self, response):
         lyrics, artist, title = "", "", ""
         LYRIC_SELECTOR = 'div:not([class])'
         TITLE_SELECTOR = '//script[@type=\'text/javascript\']'
@@ -68,8 +68,6 @@ class AZLyricsSpider(scrapy.Spider):
                                                 song['title'], 
                                                 "\n".join(song['lyrics'])))
         self.songs.append(song)
-        if self.base_path:
-            self.__writeFile(song)
         return
 
     def __writeFile(self, song):
