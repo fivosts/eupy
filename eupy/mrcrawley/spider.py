@@ -15,15 +15,15 @@ class AZLyricsSpider(scrapy.Spider):
                         'DOWNLOAD_DELAY': 3
                         }
 
-    def __init__(self, urls, path=None):
+    def __init__(self, urls):
         self.start_urls = urls
-        self.base_path = path
         self.__excl_str = "<!-- Usage of azlyrics.com content by any third-party lyrics provider is prohibited by our licensing agreement. Sorry about that. -->"
         self.logger.setLevel(logging.INFO)
         return
 
     ### Parsing Methods
     def parse(self, response):
+        print("AA")
         LINK_SELECTOR = 'div.listalbum-item'
         for song in response.css(LINK_SELECTOR):
             song_page = song.css('::attr(href)').extract_first()
@@ -105,12 +105,12 @@ Interface method for AZ Spider
 artist: string value of requested artist for crawling
 path: target path to write files
 """
-def crawl(artist, path=None):
+def crawl(artist):
     if artist not in ARTIST_MAP:
         raise ValueError("{} not available for crawling".format(artist))
     process = CrawlerProcess({
         'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
     })
-    process.crawl(AZLyricsSpider, ARTIST_MAP[artist], path)
+    process.crawl(AZLyricsSpider, "https://www.azlyrics.com/p/pinkfloyd.html")
     process.start() # the script will block here until the crawling is finished
     return
