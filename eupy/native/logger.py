@@ -6,19 +6,20 @@ Wrapper class over logging.Logger to automate formatting and other jobs
 """
 class Logger:
 
-	def __init__(self, name):
-		self.configLogger(name)
+	def __init__(self, name, level = logging.INFO):
+		self._configLogger(name, level)
+		self.debug("Logger initialized")
 		return
 
-	def _configLogger(self, name):
+	def _configLogger(self, name, level):
 		
 		# create logger
 		self._logger = logging.getLogger(name)
-		self._logger.setLevel(logging.INFO)
+		self._logger.setLevel(level)
 
 		# create console handler and set level to debug
 		ch = logging.StreamHandler()
-		ch.setLevel(logging.INFO)
+		ch.setLevel(level)
 
 		# create formatter
 		formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
@@ -57,3 +58,16 @@ class Logger:
 
 	def getLogger(self, name):
 		return self._logger
+
+_logger = None
+
+def initLogger(name):
+	global _logger
+	_logger = Logger(name)
+	return _logger
+
+def getLogger():
+	if _logger == None:
+		raise NameError("Logger has not been initialized!")
+	else:
+		return _logger
