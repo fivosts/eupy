@@ -30,6 +30,19 @@ class AZLyricsSpider(scrapy.Spider):
             yield scrapy.Request(response.urljoin(song_page), 
                                 callback=self._parse_song)
 
+    """
+    Return raw Data in list
+    """
+    def getData():
+    	return self.songs
+
+   	"""
+   	Return formatted data to str, ready to be written in file
+   	"""
+    def getDataStr():
+    	return ["{}\n{}\n\n{}".format(x['artist'], x['title'], "\n".join(x['lyrics']))
+    				for x in self.songs]
+
     def _parse_song(self, response):
         lyrics, artist, title = "", "", ""
         LYRIC_SELECTOR = 'div:not([class])'
