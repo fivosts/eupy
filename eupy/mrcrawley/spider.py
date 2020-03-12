@@ -117,6 +117,8 @@ artist: string value of requested artist for crawling
 path: target path to write files
 """
 def crawl(artist):
+    l.getLogger().debug("eupy.mrcrawley.spider.crawl()")
+    l.getLogger().info("Set up web crawler to fetch {} data.".format(artist))
     if artist not in ARTIST_MAP:
         raise ValueError("{} not available for crawling".format(artist))
     process = CrawlerProcess({
@@ -124,5 +126,6 @@ def crawl(artist):
     })
     process.crawl(AZLyricsSpider, ARTIST_MAP[artist], artist)
     process.start() # the script will block here until the crawling is finished
+    l.getLogger().info("Crawling {} succeeded".format(artist))
     global _data
     return _data
