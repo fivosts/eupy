@@ -15,9 +15,8 @@ class AZLyricsSpider(scrapy.Spider):
                         'DOWNLOAD_DELAY': 3
                         }
 
-    def __init__(self, url, artist):
+    def __init__(self, url):
         self.start_urls = [url]
-        self.artist = artist
         self.__excl_str = "<!-- Usage of azlyrics.com content by any third-party lyrics provider is prohibited by our licensing agreement. Sorry about that. -->"
         self.logger.setLevel(logging.INFO)
         return
@@ -71,33 +70,32 @@ class AZLyricsSpider(scrapy.Spider):
         self.logger.info("\n\n{} - {}\n{}\n".format(song['artist'],
                                                 song['title'], 
                                                 "\n".join(song['lyrics'])))
-        global _data
-        _data[self.artist].append(song)
+        _data.append(song)
         return
 
-_data = {}
+_data = []
 
-"""
-Return all raw Data.
-"""
-def getData():
-    global _data
-    return _data
+# """
+# Return all raw Data.
+# """
+# def getData():
+#     global _data
+#     return _data
 
-"""
-Return raw Data for artist.
-"""
-def getArtistData(artist):
-    global _data
-    return _data[artist]
+# """
+# Return raw Data for artist.
+# """
+# def getArtistData(artist):
+#     global _data
+#     return _data[artist]
 
-"""
-Return formatted data to str, ready to be written in file.
-"""
-def getArtistDataStr():
-    global _data
-    return ["{}\n{}\n\n{}".format(x['artist'], x['title'], "\n".join(x['lyrics']))
-                    for x in data[ar] for ar in _data]
+# """
+# Return formatted data to str, ready to be written in file.
+# """
+# def getArtistDataStr():
+#     global _data
+#     return ["{}\n{}\n\n{}".format(x['artist'], x['title'], "\n".join(x['lyrics']))
+#                     for x in data[ar] for ar in _data]
 
 """
 Directrory of existing spiders for artists.
@@ -121,15 +119,10 @@ path: target path to write files
 def crawl(artist):
     if artist not in ARTIST_MAP:
         raise ValueError("{} not available for crawling".format(artist))
-    global _data
-    if artist not in _data:
-        _data[artist] = []
-    else:
-        l.getLogger().warning("Data for {} already exist in buffer.".format(artist))
-
     process = CrawlerProcess({
         'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
     })
     process.crawl(AZLyricsSpider, ARTIST_MAP[artist], artist)
     process.start() # the script will block here until the crawling is finished
-    return
+    global _data
+    return _data
