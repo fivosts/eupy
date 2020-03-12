@@ -96,9 +96,8 @@ Return formatted data to str, ready to be written in file.
 """
 def getArtistDataStr():
     global _data
-    for ar in _data:
-        return ["{}\n{}\n\n{}".format(x['artist'], x['title'], "\n".join(x['lyrics']))
-                    for x in _data[ar]]
+    return ["{}\n{}\n\n{}".format(x['artist'], x['title'], "\n".join(x['lyrics']))
+                    for x in data[ar] for ar in _data]
 
 """
 Directrory of existing spiders for artists.
