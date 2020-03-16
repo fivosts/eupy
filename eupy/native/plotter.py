@@ -95,7 +95,7 @@ def plot_bars(point_set, metadata = {}, figsize = (11, 7),
     x_count = point_set[0]['x'][0]
     group_count = point_set[0]['x']
     bar_height_offset = [[0] * len(x_count)] * len(group_count)
-    bar_width = 0.3
+    bar_width = 0.5
 
     for group_index, datapoint in enumerate(point_set):
 
