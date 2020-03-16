@@ -69,29 +69,33 @@ def plot_line(pr, rec, x_axis, plot_name, single_line = False, dual_axis = False
 
     return
 
-## Specific plotting implementation for execution trace clusters. Ignore.
-# [ { 'x': [] int, 'y': [], 'label_point': str } ] 
-def plot_bars(point_set, metadata = {}, figsize = (11, 7), show_file = False, 
-                                                                save_file = False,
-                                                                x_rotation = 45,
-                                                                file_extension = "png",
-                                                                file_path = "",
-                                                                plot_title = "", 
-                                                                legend = False, 
-                                                                transparent_frame = False, 
-                                                                bar_annotations = False, 
-                                                                show_xlabels = False):
+## Plot sequence of bars, or pile of bars or pile of sequence of bars...
+# [ { 'x': [[], [], ....] int, 'y': [[], [], ..., 'label_point': [str, str, ...] }, {}, ... ]
+## 1. Add new triplets of lists in 'x', 'y' and 'label' to append more bars
+## 2. Add new dictionaries to add more bars on top of the others on the same x coordinate
+## Restrictions: 'x' lists across dictionaries must be the same in order to stack bars correctly
+def plot_bars(point_set, metadata = {}, figsize = (11, 7), 
+                                        show_file = False, 
+                                        save_file = False,
+                                        x_rotation = 45,
+                                        file_extension = "png",
+                                        file_path = "",
+                                        plot_title = "", 
+                                        legend = False, 
+                                        transparent_frame = False, 
+                                        bar_annotations = False, 
+                                        show_xlabels = False):
 
     color_stack = [] # TODO
 
+    sns.set_style({'legend.frameon': True, 'font.family': [u'serif']})
     fig,ax = plt.subplots(figsize = figsize)
-    # sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
 
     bars = []   # Bar plots here
     x_count = point_set[0]['x'][0]
     group_count = point_set[0]['x']
     bar_height_offset = [[0] * len(x_count)] * len(group_count)
-    bar_width = 0.2
+    bar_width = 0.3
 
     for group_index, datapoint in enumerate(point_set):
 
@@ -172,23 +176,6 @@ def plot_bars(point_set, metadata = {}, figsize = (11, 7), show_file = False,
 
     return
 
-
-def _initPlot(figsize, 
-              sns_style = ('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
-              ):
-
-    sns.set_style(*sns_style)
-    fig, ax = plt.subplots(figsize = figsize)
-
-    ax.spines["top"].set_visible(False)    
-    ax.spines["bottom"].set_visible(False)    
-    ax.spines["right"].set_visible(False)    
-    ax.spines["left"].set_visible(False)  
-
-    ax.get_xaxis().tick_bottom()    
-    ax.get_yaxis().tick_left()
-
-    return fig, ax
 
 ###############################################
 ################### LEGACY ####################
