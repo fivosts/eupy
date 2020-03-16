@@ -4,35 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-def bars(data, # Plotted dataset TODO format 
-        title, # Title of plot 
-        figsize = (11, 7), # Dimensions of plot
-        show = False, # set to True to show on screen
-        plot = False # set to True to save to file
-        ):
-
-    fig, ax = _initPlot(figsize)
-
-    return
-
-def _initPlot(figsize, 
-              sns_style = ('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
-              ):
-
-    sns.set_style(*sns_style)
-    fig, ax plt.subplots(figsize = figsize)
-
-    ax.spines["top"].set_visible(False)    
-    ax.spines["bottom"].set_visible(False)    
-    ax.spines["right"].set_visible(False)    
-    ax.spines["left"].set_visible(False)  
-
-    ax.get_xaxis().tick_bottom()    
-    ax.get_yaxis().tick_left()
-
-    return fig, ax
-
-
 # plot_line(precision, recall, ['5', '10', '15', '20', '30'], base_path + "/pr_train_charts/pr_train_size_chart_" + str(epoch), dual_axis = True, plot_label = "Ethereum")
 #Generic function. Plots single line, plots, two lines on dual axis, or two lines on 1 axis
 def plot_line(pr, rec, x_axis, plot_name, single_line = False, dual_axis = False, plot_label = ""):
@@ -98,7 +69,129 @@ def plot_line(pr, rec, x_axis, plot_name, single_line = False, dual_axis = False
 
     return
 
+## Specific plotting implementation for execution trace clusters. Ignore.
+# [ { 'x': [] int, 'y': [], 'label_point': str } ] 
+def plot_bars(point_set, metadata = {}, figsize = (11, 7), show_file = False, 
+                                                                save_file = False,
+                                                                x_rotation = 45,
+                                                                file_extension = "png",
+                                                                file_path = "",
+                                                                plot_title = "", 
+                                                                legend = False, 
+                                                                transparent_frame = False, 
+                                                                bar_annotations = False, 
+                                                                show_xlabels = False):
 
+    color_stack = [] # TODO
+
+    fig,ax = plt.subplots(figsize = figsize)
+    # sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
+
+    bars = []   # Bar plots here
+    x_count = point_set[0]['x'][0]
+    group_count = point_set[0]['x']
+    bar_height_offset = [[0] * len(x_count)] * len(group_count)
+    bar_width = 0.2
+
+    for group_index, datapoint in enumerate(point_set):
+
+        bar_width_offset_range = 2 * bar_width * ( float(len(datapoint['x'])) / 2 - 0.5)
+        member_index = 0
+        for x_group, y_group, label_group in zip(datapoint['x'], datapoint['y'], datapoint['label']): # if datapoint['y'] is a list of lists, then it means grouping
+
+            member_ind_count = member_index + min(0.5, (len(datapoint['x']) + 1) % 2) - int(len(datapoint['x']) / 2)
+            if group_index != 0:
+                bars.append(ax.bar(np.arange(len(x_group)) + member_ind_count * bar_width_offset_range, 
+                                    y_group, 
+                                    bar_width, 
+                                    bottom = bar_height_offset[member_index], 
+                                    label = label_group))
+            else:
+                bars.append(ax.bar(np.arange(len(x_group)) + member_ind_count * bar_width_offset_range, 
+                                    y_group, 
+                                    bar_width, 
+                                    label = label_group))
+            bar_height_offset[member_index] = [x + y for x,y in zip(bar_height_offset[member_index], y_group)]
+            member_index += 1
+
+    # TODO
+    if bar_annotations == True:
+        pass
+
+    # ax.set_ylim([0, bar_height_offset[0][0] * 1.02])
+    plt.xticks(np.arange(len(x_count)), (x for x in x_count), rotation = x_rotation)
+    ax.set_xticklabels((x for x in x_count))
+
+    ####### Fix that with arguments
+    if transparent_frame == True:
+        ax.spines["top"].set_visible(False)
+        ax.spines["left"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["bottom"].set_visible(False)
+
+    if show_xlabels == False:
+        ax.tick_params(
+            axis='x',          # changes apply to the x-axis
+            which='both',      # both major and minor ticks are affected
+            bottom=False,      # ticks along the bottom edge are off
+            top=False,         # ticks along the top edge are off
+            labelbottom=False)  # labels along the bottom edge are off
+
+
+    for dt in metadata:
+        if dt == "criterion":
+            ax.axvline(((metadata[dt]['value'] - 1) * 2 + 1) / 2, linestyle = metadata[dt]['linestyle'], label = metadata[dt]['type'], color = metadata[dt]['color'])
+        elif dt == "title":
+            ax.set_title(metadata[dt]['value'], fontsize = metadata[dt]['fontsize'], fontname = 'serif')
+        elif dt == "xlabel":
+            ax.set_xlabel(metadata[dt]['value'], fontsize = metadata[dt]['fontsize'], fontname = 'serif')
+        elif dt == "ylabel":
+            ax.set_ylabel(metadata[dt]['value'], fontsize = metadata[dt]['fontsize'], fontname = 'serif')
+        elif dt == "grid":
+            ax.grid(which = metadata[dt]['which'], alpha = metadata[dt]['alpha'], linestyle = metadata[dt]['linestyle'], axis = metadata[dt]['axis'])
+
+        """
+        Types of metadata: Linkage, cluster count, name of project, clustering algorithm
+        """
+
+    if legend == True:
+        handles, labels = ax.get_legend_handles_labels()
+        plt.legend(handles, labels)
+
+    if save_file == True:
+        plt.savefig(file_path + file_extension.replace(".", ""), bbox_inches='tight')
+
+    if show_file == True:
+        plt.show()
+
+
+    plt.clf()
+    plt.cla()
+    plt.close('all')
+    plt.close(fig)
+
+    return
+
+
+def _initPlot(figsize, 
+              sns_style = ('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
+              ):
+
+    sns.set_style(*sns_style)
+    fig, ax = plt.subplots(figsize = figsize)
+
+    ax.spines["top"].set_visible(False)    
+    ax.spines["bottom"].set_visible(False)    
+    ax.spines["right"].set_visible(False)    
+    ax.spines["left"].set_visible(False)  
+
+    ax.get_xaxis().tick_bottom()    
+    ax.get_yaxis().tick_left()
+
+    return fig, ax
+
+###############################################
+################### LEGACY ####################
 ## Specific plotting implementation for execution trace clusters. Ignore.
 def plot_cluster_bars(cluster_distrib, file_path = "", 
                                         metadata = {},
@@ -173,106 +266,3 @@ def plot_cluster_bars(cluster_distrib, file_path = "",
 
     return
 
-
-## Specific plotting implementation for execution trace clusters. Ignore.
-# [ { 'x': [] int, 'y': [], 'label_point': str } ] 
-def plot_bars(point_set, metadata = {}, figsize = (11, 7), show_file = False, 
-                                                                save_file = False,
-                                                                x_rotation = 45,
-                                                                file_extension = "png",
-                                                                file_path = "",
-                                                                plot_title = "", 
-                                                                legend = False, 
-                                                                transparent_frame = False, 
-                                                                bar_annotations = False, 
-                                                                show_xlabels = False):
-
-    color_stack = [] # TODO
-
-    fig,ax = plt.subplots(figsize = figsize)
-    # sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
-
-    bars = []   # Bar plots here
-    x_count = point_set[0]['x'][0]
-    group_count = point_set[0]['x']
-    bar_height_offset = [[0] * len(x_count)] * len(group_count)
-    bar_width = 0.2
-
-    for group_index, datapoint in enumerate(point_set):
-
-        bar_width_offset_range = 2 * bar_width * ( float(len(datapoint['x'])) / 2 - 0.5)
-        member_index = 0
-        for x_group, y_group, label_group in zip(datapoint['x'], datapoint['y'], datapoint['label']): # if datapoint['y'] is a list of lists, then it means grouping
-
-            member_ind_count = member_index + min(0.5, (len(datapoint['x']) + 1) % 2) - int(len(datapoint['x']) / 2)
-            if group_index != 0:
-                bars.append(ax.bar(np.arange(len(x_group)) + member_ind_count * bar_width_offset_range, 
-                                    y_group, 
-                                    bar_width, 
-                                    bottom = bar_height_offset[member_index], 
-                                    label = label_group))
-            else:
-                bars.append(ax.bar(np.arange(len(x_group)) + member_ind_count * bar_width_offset_range, 
-                                    y_group, 
-                                    bar_width, 
-                                    label = label_group))
-            bar_height_offset[member_index] = [x + y for x,y in zip(bar_height_offset[member_index], y_group)]
-            member_index += 1
-
-    # TODO
-    if bar_annotations == True:
-        pass
-
-    ax.set_ylim([0, bar_height_offset[0][0] * 1.02])
-    plt.xticks(np.arange(len(x_count)), (x for x in x_count), rotation = x_rotation)
-    ax.set_xticklabels((x for x in x_count))
-
-    ####### Fix that with arguments
-    if transparent_frame == True:
-        ax.spines["top"].set_visible(False)
-        ax.spines["left"].set_visible(False)
-        ax.spines["right"].set_visible(False)
-        ax.spines["bottom"].set_visible(False)
-
-    if show_xlabels == False:
-        ax.tick_params(
-            axis='x',          # changes apply to the x-axis
-            which='both',      # both major and minor ticks are affected
-            bottom=False,      # ticks along the bottom edge are off
-            top=False,         # ticks along the top edge are off
-            labelbottom=False)  # labels along the bottom edge are off
-
-
-    for dt in metadata:
-        if dt == "criterion":
-            ax.axvline(((metadata[dt]['value'] - 1) * 2 + 1) / 2, linestyle = metadata[dt]['linestyle'], label = metadata[dt]['type'], color = metadata[dt]['color'])
-        elif dt == "title":
-            ax.set_title(metadata[dt]['value'], fontsize = metadata[dt]['fontsize'], fontname = 'serif')
-        elif dt == "xlabel":
-            ax.set_xlabel(metadata[dt]['value'], fontsize = metadata[dt]['fontsize'], fontname = 'serif')
-        elif dt == "ylabel":
-            ax.set_ylabel(metadata[dt]['value'], fontsize = metadata[dt]['fontsize'], fontname = 'serif')
-        elif dt == "grid":
-            ax.grid(which = metadata[dt]['which'], alpha = metadata[dt]['alpha'], linestyle = metadata[dt]['linestyle'], axis = metadata[dt]['axis'])
-
-        """
-        Types of metadata: Linkage, cluster count, name of project, clustering algorithm
-        """
-
-    if legend == True:
-        handles, labels = ax.get_legend_handles_labels()
-        plt.legend(handles, labels)
-
-    if save_file == True:
-        plt.savefig(file_path + file_extension.replace(".", ""), bbox_inches='tight')
-
-    if show_file == True:
-        plt.show()
-
-
-    plt.clf()
-    plt.cla()
-    plt.close('all')
-    plt.close(fig)
-
-    return
