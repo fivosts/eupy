@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-def plot_cluster_bars(this, cluster_distrib, file_path = "", metadata = {},
+def plot_cluster_bars(cluster_distrib, file_path = "", metadata = {},
 																	binary_class = False,
 																	plot_only_labels = [],
 																	show_file = False, 
@@ -54,7 +54,7 @@ def plot_cluster_bars(this, cluster_distrib, file_path = "", metadata = {},
 
 	## This point below must be generalized TODO
 
-	this.plot_bars(datapoints, file_path = file_path, metadata = metadata, figsize = figsize, show_file = show_file, 
+	plot_bars(datapoints, file_path = file_path, metadata = metadata, figsize = figsize, show_file = show_file, 
 					save_file = save_file, file_extension = file_extension, 
 					plot_title = plot_title, legend = legend, x_rotation = x_rotation,
 					transparent_frame = transparent_frame, bar_annotations = bar_annotations,
@@ -80,7 +80,7 @@ def plot_cluster_bars(this, cluster_distrib, file_path = "", metadata = {},
 
 
 # [ { 'x': [] int, 'y': [], 'label_point': str } ] 
-def plot_bars(this, point_set, metadata = {}, figsize = (11, 7), show_file = False, 
+def plot_bars(point_set, metadata = {}, figsize = (11, 7), show_file = False, 
 																save_file = False,
 																x_rotation = 45,
 																file_extension = "png",
@@ -184,7 +184,7 @@ def plot_bars(this, point_set, metadata = {}, figsize = (11, 7), show_file = Fal
 
 # plot_line(precision, recall, ['5', '10', '15', '20', '30'], base_path + "/pr_train_charts/pr_train_size_chart_" + str(epoch), dual_axis = True, plot_label = "Ethereum")
 #Generic function. Plots single line, plots, two lines on dual axis, or two lines on 1 axis
-def plot_line(this, pr, rec, x_axis, plot_name, single_line = False, dual_axis = False, plot_label = ""):
+def plot_line(pr, rec, x_axis, plot_name, single_line = False, dual_axis = False, plot_label = ""):
 
 	fig,ax = plt.subplots(figsize=(11,7))
 	sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
