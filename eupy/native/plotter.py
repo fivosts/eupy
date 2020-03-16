@@ -80,7 +80,7 @@ def plot_cluster_bars(cluster_distrib, file_path = "", metadata = {},
 	return
 
 
-
+## Specific plotting implementation for execution trace clusters. Ignore.
 # [ { 'x': [] int, 'y': [], 'label_point': str } ] 
 def plot_bars(point_set, metadata = {}, figsize = (11, 7), show_file = False, 
 																save_file = False,
