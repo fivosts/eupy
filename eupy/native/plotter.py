@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
+
+## Specific plotting implementation for execution trace clusters. Ignore.
 def plot_cluster_bars(cluster_distrib, file_path = "", metadata = {},
 																	binary_class = False,
 																	plot_only_labels = [],
