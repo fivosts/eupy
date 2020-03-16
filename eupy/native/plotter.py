@@ -5,21 +5,89 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
+def bars()
+
+# plot_line(precision, recall, ['5', '10', '15', '20', '30'], base_path + "/pr_train_charts/pr_train_size_chart_" + str(epoch), dual_axis = True, plot_label = "Ethereum")
+#Generic function. Plots single line, plots, two lines on dual axis, or two lines on 1 axis
+def plot_line(pr, rec, x_axis, plot_name, single_line = False, dual_axis = False, plot_label = ""):
+
+	fig,ax = plt.subplots(figsize=(11,7))
+	sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
+
+	ax.spines["top"].set_visible(False)    
+	ax.spines["bottom"].set_visible(False)    
+	ax.spines["right"].set_visible(False)    
+	ax.spines["left"].set_visible(False)  
+
+	ax.get_xaxis().tick_bottom()    
+	ax.get_yaxis().tick_left()
+
+	if single_line == True:
+		ax.plot(pr, rec, '--xb')		
+		ax.set_ylabel('Precision', fontsize = 13)
+		ax.set_ylabel('Recall', fontsize = 13)
+		ax.set_xlabel('Recall', fontsize = 13)
+		print(pr)
+		print(rec)
+		annotation = ['50', '100', '200', '400', '800', '1200']
+		for i in range(len(pr)):
+			ax.annotate(annotation[i], (pr[i], rec[i]), xycoords = 'data', fontsize = 11)
+	elif dual_axis == True:
+		ax2 = ax.twinx()
+		ax.set_title(plot_label, fontsize = 34)
+		ax.title.set_position([.5, 1.02])
+		ax.plot(x_axis, pr, '-x', color = '#006d2c', label='precision', linewidth = 2, mew=2, ms=7)
+		ax2.plot(x_axis, rec, '-x', color = '#fc9272', label='recall', linewidth = 2, mew=2, ms=7)
+		ax.tick_params(labelsize = 21)
+		ax2.tick_params(labelsize = 21)
+		ax.set_ylabel('Precision', color = '#006d2c', fontsize = 28)
+		ax2.set_ylabel('Recall', color = '#fc9272', fontsize = 28)
+		ax.set_xlabel("% traces used in training", fontsize = 28, labelpad = 10)
+
+		ax.yaxis.grid(False) #horizontal grid
+		ax.xaxis.grid(False) #horizontal grid
+
+	else:
+		x_axis1 = np.arange(len(pr))
+		ax.plot(pr, x_axis1, '-x', color = 'green', label='precision', linewidth = 2, mew=2, ms=7)
+		ax.plot(rec, x_axis1, '-x', color = 'coral', label='recall', linewidth = 2, mew=2, ms=7)
+		ax.set_ylabel('%')
+		ax.set_xlabel('Epochs')
+		ax.legend(loc='lower right', fontsize = 12, markerfirst = False, frameon = False)
+
+	ax.set_ylim([0.3, 1.05])
+	# limit = round(max(0, min(0.3, min(min(pr), min(rec)) - 0.1)), 1)
+	# plt.yticks(np.arange(0.4, 1.0, 0.2))
+	# ax.grid(which='major', alpha=0.7, linestyle = '-', axis = 'y')
+
+	if dual_axis == True:
+		ax2.set_ylim([0.3, 1.05])
+		# limit2 = round(max(0, min(0.3, min(min(pr), min(rec)) - 0.1)), 1)
+		# plt.yticks(np.arange(0.0, 1.1, 0.1))
+		# ax2.set_yticks(np.arange(0.4, 1.0, 0.2))
+		# ax2.grid(which='major', alpha=0.7, linestyle = '--', axis = 'y')
+
+	# plt.show()
+	plt.savefig(plot_name + '.png', bbox_inches="tight", format='png')
+
+	return
+
 
 ## Specific plotting implementation for execution trace clusters. Ignore.
-def plot_cluster_bars(cluster_distrib, file_path = "", metadata = {},
-																	binary_class = False,
-																	plot_only_labels = [],
-																	show_file = False, 
-																	save_file = False,
-																	file_extension = "png",
-																	plot_title = "",
-																	legend = False,
-																	figsize = (11, 7),
-																	x_rotation = 45,
-																	transparent_frame = False,
-																	bar_annotations = False, 
-																	show_xlabels = False):
+def plot_cluster_bars(cluster_distrib, file_path = "", 
+										metadata = {},
+										binary_class = False,
+										plot_only_labels = [],
+										show_file = False, 
+										save_file = False,
+										file_extension = "png",
+										plot_title = "",
+										legend = False,
+										figsize = (11, 7),
+										x_rotation = 45,
+										transparent_frame = False,
+										bar_annotations = False, 
+										show_xlabels = False):
 
 	bar_length = min(40, len(cluster_distrib))
 	label_order = ["pass"]
@@ -180,71 +248,5 @@ def plot_bars(point_set, metadata = {}, figsize = (11, 7), show_file = False,
 	plt.cla()
 	plt.close('all')
 	plt.close(fig)
-
-	return
-
-
-# plot_line(precision, recall, ['5', '10', '15', '20', '30'], base_path + "/pr_train_charts/pr_train_size_chart_" + str(epoch), dual_axis = True, plot_label = "Ethereum")
-#Generic function. Plots single line, plots, two lines on dual axis, or two lines on 1 axis
-def plot_line(pr, rec, x_axis, plot_name, single_line = False, dual_axis = False, plot_label = ""):
-
-	fig,ax = plt.subplots(figsize=(11,7))
-	sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
-
-	ax.spines["top"].set_visible(False)    
-	ax.spines["bottom"].set_visible(False)    
-	ax.spines["right"].set_visible(False)    
-	ax.spines["left"].set_visible(False)  
-
-	ax.get_xaxis().tick_bottom()    
-	ax.get_yaxis().tick_left()
-
-	if single_line == True:
-		ax.plot(pr, rec, '--xb')		
-		ax.set_ylabel('Precision', fontsize = 13)
-		ax.set_ylabel('Recall', fontsize = 13)
-		ax.set_xlabel('Recall', fontsize = 13)
-		print(pr)
-		print(rec)
-		annotation = ['50', '100', '200', '400', '800', '1200']
-		for i in range(len(pr)):
-			ax.annotate(annotation[i], (pr[i], rec[i]), xycoords = 'data', fontsize = 11)
-	elif dual_axis == True:
-		ax2 = ax.twinx()
-		ax.set_title(plot_label, fontsize = 34)
-		ax.title.set_position([.5, 1.02])
-		ax.plot(x_axis, pr, '-x', color = '#006d2c', label='precision', linewidth = 2, mew=2, ms=7)
-		ax2.plot(x_axis, rec, '-x', color = '#fc9272', label='recall', linewidth = 2, mew=2, ms=7)
-		ax.tick_params(labelsize = 21)
-		ax2.tick_params(labelsize = 21)
-		ax.set_ylabel('Precision', color = '#006d2c', fontsize = 28)
-		ax2.set_ylabel('Recall', color = '#fc9272', fontsize = 28)
-		ax.set_xlabel("% traces used in training", fontsize = 28, labelpad = 10)
-
-		ax.yaxis.grid(False) #horizontal grid
-		ax.xaxis.grid(False) #horizontal grid
-
-	else:
-		x_axis1 = np.arange(len(pr))
-		ax.plot(pr, x_axis1, '-x', color = 'green', label='precision', linewidth = 2, mew=2, ms=7)
-		ax.plot(rec, x_axis1, '-x', color = 'coral', label='recall', linewidth = 2, mew=2, ms=7)
-		ax.set_ylabel('%')
-		ax.set_xlabel('Epochs')
-		ax.legend(loc='lower right', fontsize = 12, markerfirst = False, frameon = False)
-
-	ax.set_ylim([0.3, 1.05])
-	# limit = round(max(0, min(0.3, min(min(pr), min(rec)) - 0.1)), 1)
-	# plt.yticks(np.arange(0.4, 1.0, 0.2))
-	# ax.grid(which='major', alpha=0.7, linestyle = '-', axis = 'y')
-
-	if dual_axis == True:
-		ax2.set_ylim([0.3, 1.05])
-		# limit2 = round(max(0, min(0.3, min(min(pr), min(rec)) - 0.1)), 1)
-		# plt.yticks(np.arange(0.0, 1.1, 0.1))
-		# ax2.set_yticks(np.arange(0.4, 1.0, 0.2))
-		# ax2.grid(which='major', alpha=0.7, linestyle = '--', axis = 'y')
-
-	# plt.show()
-	plt.savefig(plot_name + '.png', bbox_inches="tight", format='png')
 
 	return
