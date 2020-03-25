@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
+# from collections import OrderedDict
+
 ## Generic function. Plot multiple lines over the same x and y axis
 ## Input is a list of dicts. Each dict contains a sublist SL represents a line.
 ## Y-values: val(SL_i), X-values: ind(SL_i)
@@ -11,27 +13,41 @@ import seaborn as sns
 def plotLinesUniAxis(datapoints,
                     vert_grid = False,
                     hor_grid = True,
+                    y_label = ("", 13),
+                    x_label = ("", 13),
                     plot_name = None, 
                     figsize = (11, 7)):
 
     sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
     fig, ax = plt.subplots(figsize = figsize)
 
-    color_stack = [] ## TODO
+    # color_stack = OrderedDict() ## TODO
 
     ax.spines["top"].set_visible(False)    
     ax.spines["bottom"].set_visible(False)    
     ax.spines["right"].set_visible(False)    
     ax.spines["left"].set_visible(False)  
 
-    ax.yaxis.grid(hor_grid)
     ax.xaxis.grid(vert_grid)
-
+    ax.set_xlabel(x_label[0], fontsize = x_label[1])
     ax.get_xaxis().tick_bottom()    
+
+    ax.yaxis.grid(hor_grid)
+    ax.set_ylabel(y_label[0], fontsize = y_label[1])
     ax.get_yaxis().tick_left()
 
     for dp in datapoints:
-        ax.plot(np.arange(len(dp['val'])), dp['val'])
+
+        # if 'color' in dp:
+        #     color = dp['color']
+        #     del color_stack[color]
+        # else:
+        #     color = color_stack.popitem()
+
+        ax.plot(np.arange(len(dp['val'])), 
+                dp['val'], 
+                # color = color
+                )
 
     plt.show()
 
