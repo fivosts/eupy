@@ -22,6 +22,8 @@ def plotLinesUniAxis(datapoints,
                     showfig = True,
                     savefig = None):
 
+
+### TODO add color stack, add point annotation, add line annotation
     sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
     fig, ax = plt.subplots(figsize = figsize)
 
@@ -63,6 +65,11 @@ def plotLinesUniAxis(datapoints,
         plt.savefig(savefig, bbox_inches = "tight", format = "png")
 
     return
+
+#######
+# Legacy this point downwards. Use at your own risk
+######
+
 
 # plotLine(precision, recall, ['5', '10', '15', '20', '30'], base_path + "/pr_train_charts/pr_train_size_chart_" + str(epoch), dual_axis = True, plot_label = "Ethereum")
 #Generic function. Plots single line, plots, two lines on dual axis, or two lines on 1 axis
