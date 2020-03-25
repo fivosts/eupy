@@ -18,7 +18,9 @@ def plotLinesUniAxis(datapoints,
                     y_lim = None,
                     x_lim = None,
                     plot_name = None, 
-                    figsize = (11, 7)):
+                    figsize = (11, 7),
+                    showfig = True,
+                    savefig = None):
 
     sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
     fig, ax = plt.subplots(figsize = figsize)
@@ -55,7 +57,10 @@ def plotLinesUniAxis(datapoints,
                 # color = color
                 )
 
-    plt.show()
+    if showfig:
+        plt.show()
+    if savefig:
+        plt.savefig(savefig, bbox_inches = "tight", format = "png")
 
     return
 
