@@ -4,9 +4,23 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-# plot_line(precision, recall, ['5', '10', '15', '20', '30'], base_path + "/pr_train_charts/pr_train_size_chart_" + str(epoch), dual_axis = True, plot_label = "Ethereum")
+## Generic function. Plot multiple lines over the same x and y axis
+## Input is a list of dicts. Each dict contains a sublist SL represents a line.
+## Y-values: val(SL_i), X-values: ind(SL_i)
+## Dicts also contain metadata for the plotted sublist (e.g. name of line, color, etc.)
+def plotLinesUniAxis(datapoints, plot_name = None, figsize = (11, 7)):
+
+    sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
+    fig, ax = plt.subplots(figsize = figsize)
+
+    color_stack = [] ## TODO
+
+
+    return
+
+# plotLine(precision, recall, ['5', '10', '15', '20', '30'], base_path + "/pr_train_charts/pr_train_size_chart_" + str(epoch), dual_axis = True, plot_label = "Ethereum")
 #Generic function. Plots single line, plots, two lines on dual axis, or two lines on 1 axis
-def plot_line(pr, rec, x_axis, plot_name, single_line = False, dual_axis = False, plot_label = ""):
+def plotLine(pr, rec, x_axis, plot_name, single_line = False, dual_axis = False, plot_label = ""):
 
     fig,ax = plt.subplots(figsize=(11,7))
     sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
@@ -74,7 +88,7 @@ def plot_line(pr, rec, x_axis, plot_name, single_line = False, dual_axis = False
 ## 1. Add new triplets of lists in 'x', 'y' and 'label' to append more bars
 ## 2. Add new dictionaries to add more bars on top of the others on the same x coordinate
 ## Restrictions: 'x' lists across dictionaries must be the same in order to stack bars correctly
-def plot_bars(point_set, metadata = {}, figsize = (11, 7), 
+def plotBars(point_set, metadata = {}, figsize = (11, 7), 
                                         show_file = False, 
                                         save_file = False,
                                         x_rotation = 45,
@@ -230,7 +244,7 @@ def plot_cluster_bars(cluster_distrib, file_path = "",
 
     ## This point below must be generalized TODO
 
-    plot_bars(datapoints, file_path = file_path, metadata = metadata, figsize = figsize, show_file = show_file, 
+    plotBars(datapoints, file_path = file_path, metadata = metadata, figsize = figsize, show_file = show_file, 
                     save_file = save_file, file_extension = file_extension, 
                     plot_title = plot_title, legend = legend, x_rotation = x_rotation,
                     transparent_frame = transparent_frame, bar_annotations = bar_annotations,
