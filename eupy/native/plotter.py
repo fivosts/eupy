@@ -8,13 +8,32 @@ import seaborn as sns
 ## Input is a list of dicts. Each dict contains a sublist SL represents a line.
 ## Y-values: val(SL_i), X-values: ind(SL_i)
 ## Dicts also contain metadata for the plotted sublist (e.g. name of line, color, etc.)
-def plotLinesUniAxis(datapoints, plot_name = None, figsize = (11, 7)):
+def plotLinesUniAxis(datapoints,
+                    vert_grid = False,
+                    hor_grid = True,
+                    plot_name = None, 
+                    figsize = (11, 7)):
 
     sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
     fig, ax = plt.subplots(figsize = figsize)
 
     color_stack = [] ## TODO
 
+    ax.spines["top"].set_visible(False)    
+    ax.spines["bottom"].set_visible(False)    
+    ax.spines["right"].set_visible(False)    
+    ax.spines["left"].set_visible(False)  
+
+    ax.yaxis.grid(hor_grid)
+    ax.xaxis.grid(vert_grid)
+
+    ax.get_xaxis().tick_bottom()    
+    ax.get_yaxis().tick_left()
+
+    for dp in datapoints:
+        ax.plot(np.arange(len(dp['val'])), dp['val'])
+
+    plt.show()
 
     return
 
