@@ -15,6 +15,8 @@ def plotLinesUniAxis(datapoints,
                     hor_grid = True,
                     y_label = ("", 13),
                     x_label = ("", 13),
+                    y_lim = None,
+                    x_lim = None,
                     plot_name = None, 
                     figsize = (11, 7)):
 
@@ -30,11 +32,15 @@ def plotLinesUniAxis(datapoints,
 
     ax.xaxis.grid(vert_grid)
     ax.set_xlabel(x_label[0], fontsize = x_label[1])
-    ax.get_xaxis().tick_bottom()    
+    ax.get_xaxis().tick_bottom()
+    if x_lim:
+        ax.set_xlim(x_lim)
 
     ax.yaxis.grid(hor_grid)
     ax.set_ylabel(y_label[0], fontsize = y_label[1])
     ax.get_yaxis().tick_left()
+    if y_lim:
+        ax.set_ylim(y_lim)
 
     for dp in datapoints:
 
