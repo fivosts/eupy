@@ -152,26 +152,6 @@ cnames = [
 _cached_fig = None
 _cached_ax = None
 
-## Initialize a fig, ax for live plotting 
-def initSubPlot(vert_grid = False,
-                 hor_grid = True,
-                 y_label = ("", 13),
-                 x_label = ("", 13),
-                 y_lim = None,
-                 x_lim = None,
-                 plot_name = None, 
-                 figsize = (11, 7),
-                 showfig = True,
-                 savefig = None,):
-    
-    global _cached_fig, _cached_ax
-    _cached_fig, _cached_ax = _configSubplot(figsize,
-                                             vert_grid, hor_grid,
-                                             x_label, y_label,
-                                             x_lim, y_lim)
-    return    
-
-
 def _clearCache():
     global _cached_ax, _cached_fig
     _cached_ax = None
@@ -188,7 +168,7 @@ def linesSingleAxis(datapoints,
                     x_label = ("", 13),
                     y_lim = None,
                     x_lim = None,
-                    plot_name = None, 
+                    plot_title = ("", 20), 
                     figsize = (11, 7),
                     showfig = True,
                     savefig = None,
@@ -198,7 +178,7 @@ def linesSingleAxis(datapoints,
     global _cached_fig, _cached_ax
     ## TODO trigger partial config if x_lim, y_lim or grid are different
     if (not _cached_fig and not _cached_ax) or force_init:
-        _cached_fig, _cached_ax = _configSubplot(figsize,
+        _cached_fig, _cached_ax = _configSubplot(figsize, plot_title
                                                  vert_grid, hor_grid,
                                                  x_label, y_label,
                                                  x_lim, y_lim)
@@ -243,7 +223,7 @@ def _popColor(used_colors):
             return c
     ## LOG here that no color was found
     return None
-    
+
 ## Core plotting line.
 ## Will be reused by all line config functions
 def _plotLine(axis, x, y, color): ## TODO add color, linestyle etc.
@@ -259,7 +239,8 @@ def saveFigure(savefig, showfig):
     return
 
 ## Configures and returns a subplot with a single axis
-def _configSubplot(figsize, 
+def _configSubplot(figsize,
+                  plot_title, 
                   vert_grid,
                   hor_grid, 
                   x_label, 
@@ -290,6 +271,8 @@ def _configSubplot(figsize,
     ax.get_yaxis().tick_left()
     if y_lim:
         ax.set_ylim(y_lim if isinstance(y_lim, list) else [0, y_lim])
+
+    plt.title(plot_title[0], fontsize = plot_title[1])
 
     return fig, ax
 
