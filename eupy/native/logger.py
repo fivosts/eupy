@@ -31,6 +31,14 @@ class Logger:
 		self.debug("logger.Logger._configLogger()")
 		return
 
+	@property
+	def handlers(self):
+		return self._logger.handlers
+
+	@property
+	def logger(self):
+		return self._logger
+	
 	"""
 	Main logging functions
 	"""
