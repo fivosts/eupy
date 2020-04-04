@@ -9,7 +9,6 @@ import seaborn as sns
 
 _cached_fig = None
 _cached_ax = None
-_live_datapoints = {'x': [], 'y': []}
 
 
 ## Initialize a fig, ax for live plotting 
@@ -33,10 +32,9 @@ def initSubPlot(vert_grid = False,
 
 
 def _clearCache():
-    global _cached_ax, _cached_fig, _live_datapoints
+    global _cached_ax, _cached_fig
     _cached_ax = None
     _cached_fig = None
-    _live_datapoints = {'x': [], 'y': []}
     return
 
 ## Generic function. Plot multiple lines over the same x and y axis
