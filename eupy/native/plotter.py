@@ -5,32 +5,32 @@ import numpy as np
 import seaborn as sns
 
 # from collections import OrderedDict
+## TODO add logger
 
 _cached_fig = None
 _cached_ax = None
 _live_datapoints = {'x': [], 'y': []}
 
-def plotLive(datapoints,
-            vert_grid = False,
-            hor_grid = True,
-            y_label = ("", 13),
-            x_label = ("", 13),
-            y_lim = None,
-            x_lim = None,
-            plot_name = None, 
-            figsize = (11, 7),
-            showfig = True,
-            savefig = None,
-            ):
 
-    if not _cached_fig and not _cached_ax:
-        _cached_fig, _cached_ax = _configSubplot(figsize,
-                                                 vert_grid, hor_grid,
-                                                 x_label, y_label,
-                                                 x_lim, y_lim)
+## Initialize a fig, ax for live plotting 
+def initSubPlot(vert_grid = False,
+                 hor_grid = True,
+                 y_label = ("", 13),
+                 x_label = ("", 13),
+                 y_lim = None,
+                 x_lim = None,
+                 plot_name = None, 
+                 figsize = (11, 7),
+                 showfig = True,
+                 savefig = None,):
+    
+    global _cached_fig, _cached_ax
+    _cached_fig, _cached_ax = _configSubplot(figsize,
+                                             vert_grid, hor_grid,
+                                             x_label, y_label,
+                                             x_lim, y_lim)
+    return    
 
-
-    return
 
 def _clearCache():
     global _cached_ax, _cached_fig, _live_datapoints
@@ -54,12 +54,17 @@ def pltLinesSingleAxis(datapoints,
                         figsize = (11, 7),
                         showfig = True,
                         savefig = None,
+                        live = False
                         ):
+    
+    if not _cached_fig and not _cached_ax:
+        fig, ax = _configSubplot(figsize,
+                                 vert_grid, hor_grid,
+                                 x_label, y_label,
+                                 x_lim, y_lim)
+    else:
+        fig, ax = _cached_fig, _cached_ax
 
-    fig, ax = _configSubplot(figsize,
-                             vert_grid, hor_grid,
-                             x_label, y_label,
-                             x_lim, y_lim)
     for dp in datapoints:
 
         # if 'color' in dp:
@@ -74,7 +79,8 @@ def pltLinesSingleAxis(datapoints,
             x = np.arange(len(dp['y']))
         _plotLine(ax, x, y)
 
-        _figOut(savefig, showfig)
+    if not live:
+        savefig(savefig, showfig)
 
     return
 
@@ -85,7 +91,7 @@ def _plotLine(axis, x, y): ## TODO add color, linestyle etc.
     return
 
 ## Send figure to output. Either show or save
-def _figOut(savefig, showfig)
+def savefig(savefig, showfig)
     if showfig:
         plt.show()
     if savefig:
