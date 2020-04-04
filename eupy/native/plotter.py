@@ -22,16 +22,14 @@ def pltLinesSingleAxis(datapoints,
                         x_lim = None,
                         plot_name = None, 
                         figsize = (11, 7),
-                        live = False,
                         showfig = True,
                         savefig = None,
                         ):
 
-    if not _cached_fig and not _cached_ax:
-        _cached_fig, _cached_ax = _configSubplot(figsize, 
-                                                vert_grid, hor_grid, 
-                                                x_label, y_label, 
-                                                x_lim, y_lim)
+    fig, ax = _configSubplot(figsize,
+                             vert_grid, hor_grid,
+                             x_label, y_label,
+                             x_lim, y_lim)
     for dp in datapoints:
 
         # if 'color' in dp:
@@ -44,9 +42,8 @@ def pltLinesSingleAxis(datapoints,
             x = dp['x']
         else:
             x = np.arange(len(dp['y']))
-        _plotLine(_cached_ax, x, y)
+        _plotLine(ax, x, y)
 
-    if not live:
         _figOut(savefig, showfig)
 
     return
