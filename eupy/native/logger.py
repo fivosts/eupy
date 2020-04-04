@@ -27,7 +27,8 @@ class Logger:
 		ch.setFormatter(formatter)
 
 		# add ch to logger
-		self._logger.addHandler(ch)
+		if not self._logger.handlers:
+			self._logger.addHandler(ch)
 		self.debug("logger.Logger._configLogger()")
 		return
 
