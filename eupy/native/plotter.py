@@ -92,7 +92,7 @@ def _plotLine(axis, x, y): ## TODO add color, linestyle etc.
     return
 
 ## Send figure to output. Either show or save
-def savefig(savefig, showfig)
+def savefig(savefig, showfig):
     if showfig:
         plt.show()
     if savefig:
