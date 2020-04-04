@@ -123,13 +123,13 @@ def _configSubplot(figsize,
     ax.set_xlabel(x_label[0], fontsize = x_label[1])
     ax.get_xaxis().tick_bottom()
     if x_lim:
-        ax.set_xlim(x_lim)
+        ax.set_xlim(x_lim if isinstance(x_lim, list) else [0, x_lim])
 
     ax.yaxis.grid(hor_grid)
     ax.set_ylabel(y_label[0], fontsize = y_label[1])
     ax.get_yaxis().tick_left()
     if y_lim:
-        ax.set_ylim(y_lim)
+        ax.set_ylim(y_lim if isinstance(y_lim, list) else [0, y_lim])
 
     return fig, ax
 
