@@ -13,18 +13,18 @@ _cached_ax = None
 ## Input is a list of dicts. Each dict contains a sublist SL representing a line.
 ## Y-values: val(SL_i), X-values: ind(SL_i)
 ## Dicts also contain metadata for the plotted sublist (e.g. name of line, color, etc.)
-def plotLinesUniAxis(datapoints,
-                    vert_grid = False,
-                    hor_grid = True,
-                    y_label = ("", 13),
-                    x_label = ("", 13),
-                    y_lim = None,
-                    x_lim = None,
-                    plot_name = None, 
-                    figsize = (11, 7),
-                    live = False,
-                    showfig = True,
-                    savefig = None):
+def pltLinesSingleAxis(datapoints,
+                        vert_grid = False,
+                        hor_grid = True,
+                        y_label = ("", 13),
+                        x_label = ("", 13),
+                        y_lim = None,
+                        x_lim = None,
+                        plot_name = None, 
+                        figsize = (11, 7),
+                        live = False,
+                        showfig = True,
+                        savefig = None):
 
 
     if not _cached_fig and not _cached_ax:
