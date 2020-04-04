@@ -29,6 +29,8 @@ class Logger:
 		# add ch to logger
 		if not self._logger.handlers:
 			self._logger.addHandler(ch)
+			self._logger.propagate = False
+			
 		self.debug("logger.Logger._configLogger()")
 		return
 
