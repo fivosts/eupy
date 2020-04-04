@@ -55,6 +55,7 @@ def linesSingleAxis(datapoints,
                     force_init = False,
                     ):
     global _cached_fig, _cached_ax
+    ## TODO trigger partial config if x_lim, y_lim or grid are different
     if (not _cached_fig and not _cached_ax) or force_init:
         _cached_fig, _cached_ax = _configSubplot(figsize,
                                                  vert_grid, hor_grid,
