@@ -27,7 +27,11 @@ def plotLinesUniAxis(datapoints,
                     savefig = None):
 
 
-    fig, ax = _configSubplot(figsize, vert_grid, hor_grid, x_label, y_label, x_lim, y_lim)
+    if not _cached_fig and not _cached_ax:
+        _cached_fig, _cached_ax = _configSubplot(figsize, 
+                                                vert_grid, hor_grid, 
+                                                x_label, y_label, 
+                                                x_lim, y_lim)
 
     for dp in datapoints:
 
@@ -36,7 +40,7 @@ def plotLinesUniAxis(datapoints,
         #     del color_stack[color]
         # else:
         #     color = color_stack.popitem()
-        _plotLine(ax, np.arange(len(dp['va'])), dp['val'])
+        _plotLine(_cached_ax, np.arange(len(dp['va'])), dp['val'])
 
     if not live:
         _figOut(savefig, showfig)
