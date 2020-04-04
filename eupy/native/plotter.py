@@ -214,7 +214,7 @@ def linesSingleAxis(datapoints,
     if live:
         plt.pause(0.1)
     else:
-        saveFigure(savefig, showfig)
+        show(savefig, showfig)
 
     return
 
@@ -234,7 +234,7 @@ def _plotLine(axis, x, y, color, line_name): ## TODO add linestyle etc.
     return
 
 ## Send figure to output. Either show or save
-def saveFigure(savefig, showfig):
+def show(savefig = None, showfig = True):
     if showfig:
         plt.show()
     if savefig:
