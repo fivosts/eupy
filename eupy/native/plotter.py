@@ -30,7 +30,6 @@ cnames = [
 'crimson',
 'cyan',
 'darkblue',
-'azure',
 'darkcyan',
 'darkgoldenrod',
 'darkgray',
