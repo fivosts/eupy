@@ -10,8 +10,8 @@ _cached_fig = None
 _cached_ax = None
 
 ## Generic function. Plot multiple lines over the same x and y axis
-## Input is a list of dicts. Each dict contains a sublist SL representing a line.
-## Y-values: val(SL_i), X-values: ind(SL_i)
+## Input is a list of dicts. Each dict contains a sublist (or two) representing a line.
+## Y-values: val(SLy_i), X-values: ind(SLy_i) or val(SLx_i)
 ## Dicts also contain metadata for the plotted sublist (e.g. name of line, color, etc.)
 def pltLinesSingleAxis(datapoints,
                         vert_grid = False,
@@ -39,7 +39,12 @@ def pltLinesSingleAxis(datapoints,
         #     del color_stack[color]
         # else:
         #     color = color_stack.popitem()
-        _plotLine(_cached_ax, np.arange(len(dp['va'])), dp['val'])
+        y = dp['y']
+        if 'x' in dp:
+            x = dp['x']
+        else:
+            x = np.arange(len(dp['y']))
+        _plotLine(_cached_ax, x, y)
 
     if not live:
         _figOut(savefig, showfig)
