@@ -27,7 +27,7 @@ def plotLinesUniAxis(datapoints,
                     savefig = None):
 
 
-	fig, ax = _configSubplot(figsize, vert_grid, hor_grid, x_label, y_label, x_lim, y_lim)
+    fig, ax = _configSubplot(figsize, vert_grid, hor_grid, x_label, y_label, x_lim, y_lim)
 
     for dp in datapoints:
 
@@ -38,28 +38,34 @@ def plotLinesUniAxis(datapoints,
         #     color = color_stack.popitem()
         _plotLine(ax, np.arange(len(dp['va'])), dp['val'])
 
-    if showfig:
-        plt.show()
-    if savefig:
-        plt.savefig(savefig, bbox_inches = "tight", format = "png")
+    if not live:
+        figOut(savefig, showfig)
 
     return
 
 ## Core plotting line.
 ## Will be reused by all line config functions
 def _plotLine(axis, x, y): ## TODO add color, linestyle etc.
-	axis.plot(x, y)
-	return
+    axis.plot(x, y)
+    return
+
+## Send figure to output. Either show or save
+def _figOut(savefig, showfig)
+    if showfig:
+        plt.show()
+    if savefig:
+        plt.savefig(savefig, bbox_inches = "tight", format = "png")
+    return
 
 ## Configures and returns a subplot with a single axis
 def _configSubplot(figsize, 
-				  vert_grid,
-				  hor_grid, 
-				  x_label, 
-				  y_label, 
-				  x_lim, 
-				  y_lim, 
-				  ):
+                  vert_grid,
+                  hor_grid, 
+                  x_label, 
+                  y_label, 
+                  x_lim, 
+                  y_lim, 
+                  ):
 
 ### TODO add color stack, add point annotation, add line annotation
     sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
