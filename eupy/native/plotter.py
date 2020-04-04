@@ -8,6 +8,36 @@ import seaborn as sns
 
 _cached_fig = None
 _cached_ax = None
+_live_datapoints = {'x': [], 'y': []}
+
+def plotLive(datapoints,
+            vert_grid = False,
+            hor_grid = True,
+            y_label = ("", 13),
+            x_label = ("", 13),
+            y_lim = None,
+            x_lim = None,
+            plot_name = None, 
+            figsize = (11, 7),
+            showfig = True,
+            savefig = None,
+            ):
+
+    if not _cached_fig and not _cached_ax:
+        _cached_fig, _cached_ax = _configSubplot(figsize,
+                                                 vert_grid, hor_grid,
+                                                 x_label, y_label,
+                                                 x_lim, y_lim)
+
+
+    return
+
+def _clearCache():
+    global _cached_ax, _cached_fig, _live_datapoints
+    _cached_ax = None
+    _cached_fig = None
+    _live_datapoints = {'x': [], 'y': []}
+    return
 
 ## Generic function. Plot multiple lines over the same x and y axis
 ## Input is a list of dicts. Each dict contains a sublist (or two) representing a line.
