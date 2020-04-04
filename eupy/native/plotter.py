@@ -41,7 +41,7 @@ def _clearCache():
 ## Input is a list of dicts. Each dict contains a sublist (or two) representing a line.
 ## Y-values: val(SLy_i), X-values: ind(SLy_i) or val(SLx_i)
 ## Dicts also contain metadata for the plotted sublist (e.g. name of line, color, etc.)
-def LinesSingleAxis(datapoints,
+def linesSingleAxis(datapoints,
                         vert_grid = False,
                         hor_grid = True,
                         y_label = ("", 13),
