@@ -54,15 +54,12 @@ def LinesSingleAxis(datapoints,
                         savefig = None,
                         live = False
                         ):
-    
+    global _cached_fig, _cached_ax
     if not _cached_fig and not _cached_ax:
-        fig, ax = _configSubplot(figsize,
-                                 vert_grid, hor_grid,
-                                 x_label, y_label,
-                                 x_lim, y_lim)
-    else:
-        fig, ax = _cached_fig, _cached_ax
-
+        _cached_fig, _cached_ax = _configSubplot(figsize,
+                                                 vert_grid, hor_grid,
+                                                 x_label, y_label,
+                                                 x_lim, y_lim)
     for dp in datapoints:
 
         # if 'color' in dp:
@@ -75,7 +72,7 @@ def LinesSingleAxis(datapoints,
             x = dp['x']
         else:
             x = np.arange(len(dp['y']))
-        _plotLine(ax, x, y)
+        _plotLine(_cached_ax, x, y)
 
     if live:
         plt.pause(0.1)
