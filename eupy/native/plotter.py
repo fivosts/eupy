@@ -191,11 +191,7 @@ def linesSingleAxis(datapoints,
 
         dpoint = datapoints[dp]
         line_name = dp
-        # if 'color' in dp:
-        #     color = dp['color']
-        #     del color_stack[color]
-        # else:
-        #     color = color_stack.popitem()
+
         y = dpoint['y']
         if 'x' in dpoint:
             x = dpoint['x']
@@ -233,7 +229,7 @@ def _popColor(used_colors):
 
 ## Core plotting line.
 ## Will be reused by all line config functions
-def _plotLine(axis, x, y, color, line_name): ## TODO add color, linestyle etc.
+def _plotLine(axis, x, y, color, line_name): ## TODO add linestyle etc.
     axis.plot(x, y, color, label = line_name)
     return
 
@@ -263,10 +259,10 @@ def _configSubplot(figsize,
 
     # color_stack = OrderedDict() ## TODO
 
-    ax.spines["top"].set_visible(False)    
-    ax.spines["bottom"].set_visible(False)    
-    ax.spines["right"].set_visible(False)    
-    ax.spines["left"].set_visible(False)  
+    ax.spines["top"].set_visible(True)    
+    ax.spines["bottom"].set_visible(True)    
+    ax.spines["right"].set_visible(True)    
+    ax.spines["left"].set_visible(True)  
 
     ax.xaxis.grid(vert_grid)
     ax.set_xlabel(x_label[0], fontsize = x_label[1])
