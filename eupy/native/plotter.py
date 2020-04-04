@@ -3,13 +3,154 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-
+from random import choice
 # from collections import OrderedDict
 ## TODO add logger
 
+cnames = [
+'royalblue',
+'brown',
+'deeppink',
+'azure',
+'aqua',
+'aquamarine',
+'beige',
+'bisque',
+'black',
+'blanchedalmond',
+'blue',
+'blueviolet',
+'burlywood',
+'cadetblue',
+'chartreuse',
+'chocolate',
+'coral',
+'cornflowerblue',
+'cornsilk',
+'crimson',
+'cyan',
+'darkblue',
+'darkcyan',
+'darkgoldenrod',
+'darkgray',
+'darkgreen',
+'darkkhaki',
+'darkmagenta',
+'aliceblue',
+'darkolivegreen',
+'darkorange',
+'darkorchid',
+'darkred',
+'darksalmon',
+'darkseagreen',
+'darkslateblue',
+'darkslategray',
+'darkturquoise',
+'darkviolet',
+'deepskyblue',
+'dimgray',
+'dodgerblue',
+'firebrick',
+'floralwhite',
+'forestgreen',
+'fuchsia',
+'gainsboro',
+'ghostwhite',
+'gold',
+'goldenrod',
+'gray',
+'green',
+'greenyellow',
+'honeydew',
+'hotpink',
+'indianred',
+'indigo',
+'ivory',
+'khaki',
+'lavender',
+'lavenderblush',
+'lawngreen',
+'lemonchiffon',
+'lightblue',
+'lightcoral',
+'lightcyan',
+'lightgoldenrodyellow',
+'lightgreen',
+'lightgray',
+'lightpink',
+'lightsalmon',
+'lightseagreen',
+'lightskyblue',
+'lightslategray',
+'lightsteelblue',
+'lightyellow',
+'lime',
+'limegreen',
+'linen',
+'magenta',
+'maroon',
+'mediumaquamarine',
+'mediumblue',
+'mediumorchid',
+'mediumpurple',
+'mediumseagreen',
+'mediumslateblue',
+'mediumspringgreen',
+'mediumturquoise',
+'mediumvioletred',
+'midnightblue',
+'mintcream',
+'mistyrose',
+'moccasin',
+'navajowhite',
+'navy',
+'oldlace',
+'olive',
+'olivedrab',
+'orange',
+'orangered',
+'antiquewhite',
+'orchid',
+'palegoldenrod',
+'palegreen',
+'paleturquoise',
+'palevioletred',
+'papayawhip',
+'peachpuff',
+'peru',
+'pink',
+'plum',
+'powderblue',
+'purple',
+'red',
+'rosybrown',
+'saddlebrown',
+'salmon',
+'sandybrown',
+'seagreen',
+'seashell',
+'sienna',
+'silver',
+'skyblue',
+'slateblue',
+'slategray',
+'snow',
+'springgreen',
+'steelblue',
+'tan',
+'teal',
+'thistle',
+'tomato',
+'turquoise',
+'violet',
+'wheat',
+'whitesmoke',
+'yellow',
+'yellowgreen'
+]
+
 _cached_fig = None
 _cached_ax = None
-
 
 ## Initialize a fig, ax for live plotting 
 def initSubPlot(vert_grid = False,
@@ -61,6 +202,9 @@ def linesSingleAxis(datapoints,
                                                  vert_grid, hor_grid,
                                                  x_label, y_label,
                                                  x_lim, y_lim)
+
+    ## Keep history of used colors
+    used_colors = set()
     for dp in datapoints:
 
         dpoint = datapoints[dp]
@@ -75,7 +219,14 @@ def linesSingleAxis(datapoints,
             x = dpoint['x']
         else:
             x = np.arange(len(dpoint['y']))
-        _plotLine(_cached_ax, x, y)
+
+        if 'color' in dpoint:
+            color = dpoint['color']
+        else:
+            color = _popColor(used_colors)
+        used_colors.add(color)
+
+        _plotLine(_cached_ax, x, y, color)
 
     if live:
         plt.pause(0.1)
@@ -84,10 +235,19 @@ def linesSingleAxis(datapoints,
 
     return
 
+## Picks a random color from stack unless it is already used
+def _popColor(used_colors):
+
+    for c in cnames:
+        if c not in used_colors:
+            return c
+    ## LOG here that no color was found
+    return None
+    
 ## Core plotting line.
 ## Will be reused by all line config functions
-def _plotLine(axis, x, y): ## TODO add color, linestyle etc.
-    axis.plot(x, y)
+def _plotLine(axis, x, y, color): ## TODO add color, linestyle etc.
+    axis.plot(x, y, color)
     return
 
 ## Send figure to output. Either show or save
