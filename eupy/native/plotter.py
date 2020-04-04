@@ -168,6 +168,7 @@ def linesSingleAxis(datapoints,
                     x_label = ("", 13),
                     y_lim = None,
                     x_lim = None,
+                    legend = True,
                     plot_title = ("", 20), 
                     figsize = (11, 7),
                     showfig = True,
@@ -179,6 +180,7 @@ def linesSingleAxis(datapoints,
     ## TODO trigger partial config if x_lim, y_lim or grid are different
     if (not _cached_fig and not _cached_ax) or force_init:
         _cached_fig, _cached_ax = _configSubplot(figsize, plot_title,
+                                                 legend,
                                                  vert_grid, hor_grid,
                                                  x_label, y_label,
                                                  x_lim, y_lim)
@@ -188,7 +190,7 @@ def linesSingleAxis(datapoints,
     for dp in datapoints:
 
         dpoint = datapoints[dp]
-        name = dp
+        line_name = dp
         # if 'color' in dp:
         #     color = dp['color']
         #     del color_stack[color]
@@ -206,7 +208,12 @@ def linesSingleAxis(datapoints,
             color = _popColor(used_colors)
         used_colors.add(color)
 
-        _plotLine(_cached_ax, x, y, color)
+        _plotLine(_cached_ax, x, y, color, line_name)
+
+    if legend:
+        handles, labels = plt.gca().get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        plt.legend(by_label.values(), by_label.keys())
 
     if live:
         plt.pause(0.1)
@@ -226,8 +233,8 @@ def _popColor(used_colors):
 
 ## Core plotting line.
 ## Will be reused by all line config functions
-def _plotLine(axis, x, y, color): ## TODO add color, linestyle etc.
-    axis.plot(x, y, color)
+def _plotLine(axis, x, y, color, line_name): ## TODO add color, linestyle etc.
+    axis.plot(x, y, color, label = line_name)
     return
 
 ## Send figure to output. Either show or save
@@ -241,6 +248,7 @@ def saveFigure(savefig, showfig):
 ## Configures and returns a subplot with a single axis
 def _configSubplot(figsize,
                   plot_title, 
+                  legend,
                   vert_grid,
                   hor_grid, 
                   x_label, 
