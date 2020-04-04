@@ -23,6 +23,43 @@ def plotLinesUniAxis(datapoints,
                     savefig = None):
 
 
+	fig, ax = configSubplot(figsize, vert_grid, hor_grid, x_label, y_label, x_lim, y_lim)
+
+    for dp in datapoints:
+
+        # if 'color' in dp:
+        #     color = dp['color']
+        #     del color_stack[color]
+        # else:
+        #     color = color_stack.popitem()
+        plotLine(ax, np.arange(len(dp['va'])), dp['val'])
+
+    if showfig:
+        plt.show()
+    if savefig:
+        plt.savefig(savefig, bbox_inches = "tight", format = "png")
+
+    return
+
+def livePlot(datapoints):
+
+
+## Core plotting line.
+## Will be reused by all line config functions
+def plotLine(axis, x, y): ## TODO add color, linestyle etc.
+	axis.plot(x, y)
+	return
+
+## Configures and returns a subplot with a single axis
+def configSubplot(figsize, 
+				  vert_grid,
+				  hor_grid, 
+				  x_label, 
+				  y_label, 
+				  x_lim, 
+				  y_lim, 
+				  ):
+
 ### TODO add color stack, add point annotation, add line annotation
     sns.set_style('whitegrid', {'legend.frameon': True, 'font.family': [u'serif']})
     fig, ax = plt.subplots(figsize = figsize)
@@ -46,25 +83,7 @@ def plotLinesUniAxis(datapoints,
     if y_lim:
         ax.set_ylim(y_lim)
 
-    for dp in datapoints:
-
-        # if 'color' in dp:
-        #     color = dp['color']
-        #     del color_stack[color]
-        # else:
-        #     color = color_stack.popitem()
-
-        ax.plot(np.arange(len(dp['val'])), 
-                dp['val'], 
-                # color = color
-                )
-
-    if showfig:
-        plt.show()
-    if savefig:
-        plt.savefig(savefig, bbox_inches = "tight", format = "png")
-
-    return
+    return fig, ax
 
 #######
 # Legacy this point downwards. Use at your own risk
