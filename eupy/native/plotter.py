@@ -6,6 +6,9 @@ import seaborn as sns
 
 # from collections import OrderedDict
 
+_cached_fig = None
+_cached_ax = None
+
 ## Generic function. Plot multiple lines over the same x and y axis
 ## Input is a list of dicts. Each dict contains a sublist SL representing a line.
 ## Y-values: val(SL_i), X-values: ind(SL_i)
@@ -19,11 +22,12 @@ def plotLinesUniAxis(datapoints,
                     x_lim = None,
                     plot_name = None, 
                     figsize = (11, 7),
+                    live = False,
                     showfig = True,
                     savefig = None):
 
 
-	fig, ax = configSubplot(figsize, vert_grid, hor_grid, x_label, y_label, x_lim, y_lim)
+	fig, ax = _configSubplot(figsize, vert_grid, hor_grid, x_label, y_label, x_lim, y_lim)
 
     for dp in datapoints:
 
@@ -32,7 +36,7 @@ def plotLinesUniAxis(datapoints,
         #     del color_stack[color]
         # else:
         #     color = color_stack.popitem()
-        plotLine(ax, np.arange(len(dp['va'])), dp['val'])
+        _plotLine(ax, np.arange(len(dp['va'])), dp['val'])
 
     if showfig:
         plt.show()
@@ -41,17 +45,14 @@ def plotLinesUniAxis(datapoints,
 
     return
 
-def livePlot(datapoints):
-
-
 ## Core plotting line.
 ## Will be reused by all line config functions
-def plotLine(axis, x, y): ## TODO add color, linestyle etc.
+def _plotLine(axis, x, y): ## TODO add color, linestyle etc.
 	axis.plot(x, y)
 	return
 
 ## Configures and returns a subplot with a single axis
-def configSubplot(figsize, 
+def _configSubplot(figsize, 
 				  vert_grid,
 				  hor_grid, 
 				  x_label, 
