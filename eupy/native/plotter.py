@@ -7,7 +7,7 @@ import seaborn as sns
 # from collections import OrderedDict
 
 ## Generic function. Plot multiple lines over the same x and y axis
-## Input is a list of dicts. Each dict contains a sublist SL represents a line.
+## Input is a list of dicts. Each dict contains a sublist SL representing a line.
 ## Y-values: val(SL_i), X-values: ind(SL_i)
 ## Dicts also contain metadata for the plotted sublist (e.g. name of line, color, etc.)
 def plotLinesUniAxis(datapoints,
