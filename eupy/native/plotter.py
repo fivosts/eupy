@@ -39,7 +39,7 @@ def plotLinesUniAxis(datapoints,
         _plotLine(ax, np.arange(len(dp['va'])), dp['val'])
 
     if not live:
-        figOut(savefig, showfig)
+        _figOut(savefig, showfig)
 
     return
 
