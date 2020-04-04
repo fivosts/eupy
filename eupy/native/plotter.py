@@ -38,9 +38,8 @@ def _clearCache():
     return
 
 ## Generic function. Plot multiple lines over the same x and y axis
-## Input is a list of dicts. Each dict contains a sublist (or two) representing a line.
-## Y-values: val(SLy_i), X-values: ind(SLy_i) or val(SLx_i)
-## Dicts also contain metadata for the plotted sublist (e.g. name of line, color, etc.)
+## datapoints format: {'name': {'y': [], 'x'(optional): [], 'color': .... etc. }}
+## if 'x' list is not provided , then x = np.arange(len('y'))
 def linesSingleAxis(datapoints,
                     vert_grid = False,
                     hor_grid = True,
@@ -63,16 +62,18 @@ def linesSingleAxis(datapoints,
                                                  x_lim, y_lim)
     for dp in datapoints:
 
+        dpoint = datapoints[dp]
+        name = dp
         # if 'color' in dp:
         #     color = dp['color']
         #     del color_stack[color]
         # else:
         #     color = color_stack.popitem()
-        y = dp['y']
-        if 'x' in dp:
-            x = dp['x']
+        y = dpoint['y']
+        if 'x' in dpoint:
+            x = dpoint['x']
         else:
-            x = np.arange(len(dp['y']))
+            x = np.arange(len(dpoint['y']))
         _plotLine(_cached_ax, x, y)
 
     if live:
