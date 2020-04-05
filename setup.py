@@ -4,10 +4,10 @@
 from setuptools import setup
 
 setup(name = 'eupy',
-      version = '0.0.1',
+      version = '0.0.2',
       description = 'Python set of utils and libraries',
       url = 'http://github.com/fivosts/eupy',
-      download_url = 'https://github.com/fivosts/eupy/archive/0.0.1.tar.gz',
+      download_url = 'https://github.com/fivosts/eupy/archive/0.0.2.tar.gz',
       author = 'Foivos Tsimpourlas',
       author_email = 'fivos_ts@hotmail.com',
       license = 'MIT',
