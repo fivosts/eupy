@@ -3,14 +3,14 @@
 # from distutils.core import setup
 from setuptools import setup
 
-setup(name='eupy',
-      version='0.0.1',
-      description='Python set of utils and libraries',
-      url='http://github.com/fivosts/eupy',
-      download_url='https://github.com/fivosts/eupy/archive/0.0.1.tar.gz',
-      author='Foivos Tsimpourlas',
-      author_email='fivos_ts@hotmail.com',
-      license='MIT',
+setup(name = 'eupy',
+      version = '0.0.1',
+      description = 'Python set of utils and libraries',
+      url = 'http://github.com/fivosts/eupy',
+      download_url = 'https://github.com/fivosts/eupy/archive/0.0.1.tar.gz',
+      author = 'Foivos Tsimpourlas',
+      author_email = 'fivos_ts@hotmail.com',
+      license = 'MIT',
       install_requires = [ "datetime",
                            "matplotlib",
                            "numpy",
@@ -22,5 +22,8 @@ setup(name='eupy',
                      'mrcrawley': 'eupy/mrcrawley',
                      'native'   : 'eupy/native',
                     },
-      packages=['mrcrawley', 'native', 'hermes'],
+      packages = ['mrcrawley', 'native', 'hermes'],
+      classifiers = [
+           "Programming Language :: Python :: 3.7",
+      ]
       )
