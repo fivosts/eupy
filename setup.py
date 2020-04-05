@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from distutils.core import setup
+
 setup(name='eupy',
       version='0.0.1',
       description='Python set of utils and libraries',
