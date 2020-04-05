@@ -11,10 +11,5 @@ setup(name='eupy',
       license='MIT',
       package_dir = {'': 'eupy'},
       packages=['mrcrawley', 'native'],
-      py_modules = ['hermes/hermes.py'],
-      install_requires=[
-          'scrapy',
-          'logging'#,
-          # 'lazytools'
-      ],
-      zip_safe=True)
+      # py_modules = ['hermes/hermes.py'],
+      )
