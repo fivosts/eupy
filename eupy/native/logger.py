@@ -42,6 +42,10 @@ class Logger:
 	def logger(self):
 		return self._logger
 	
+	@property
+	def level(self):
+		return logging.getLevelName(self._logger.level)
+	
 	"""
 	Main logging functions
 	"""
