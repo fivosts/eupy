@@ -1,6 +1,1 @@
-datetime
-matplotlib
-numpy
-scrapy>=2.0.0
-seaborn
-pathlib
+setuptools
