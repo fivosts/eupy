@@ -35,4 +35,7 @@ while IFS= read -r line; do
 done < "setup.py"
 
 printf "%s\n" "${inp_file[@]}" > setup.py
+
+python setup.py sdist
+twine upload --format=zip
 exit 0
