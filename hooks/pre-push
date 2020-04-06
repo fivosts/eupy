@@ -46,4 +46,6 @@ git add setup.py
 git commit -m "Automatic commit: Update package index"
 python setup.py sdist
 twine upload --format=zip
+git push
+
 exit 0
