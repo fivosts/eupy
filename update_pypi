@@ -22,31 +22,22 @@
 
 source string # linuxTool dependency
 
-while read local_ref local_sha remote_ref remote_sha
-do
-	echo $(pwd)
+while IFS= read -r line; do
+	if [[ $line == *"version"* ]]; then
+		dot="."
+		endpart="',"
+		oldpart=$(rmSuffix "$line" "$dot")
+		lastbit=$(rmfullSuffix $(rmfullPrefix "$line" "$dot") "$endpart")
+		let lastbit+=1
+		line="${oldpart}${dot}${lastbit}${endpart}"
+	fi
+	inp_file+=("$line")
+done < "setup.py"
 
-	while IFS= read -r line; do
-		if [[ $line == *"version"* ]]; then
-			dot="."
-			endpart="',"
-			oldpart=$(rmSuffix "$line" "$dot")
-			lastbit=$(rmfullSuffix $(rmfullPrefix "$line" "$dot") "$endpart")
-			let lastbit+=1
-			line="${oldpart}${dot}${lastbit}${endpart}"
-		fi
-		inp_file+=("$line")
-	done < "setup.py"
+printf "%s\n" "${inp_file[@]}" > setup.py
 
-	printf "%s\n" "${inp_file[@]}" > setup.py
-	break
-done
-
-git add setup.py
-git commit -m "Automatic commit: Update package index"
 rm ./dist/*
 python setup.py sdist --format=zip
 twine upload dist/*
-git push
 
 exit 0
