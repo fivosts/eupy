@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import logging
 import argparse
+import shell
 
 NOTSET = logging.NOTSET
 DEBUG = logging.DEBUG
@@ -14,8 +15,9 @@ Wrapper class over logging.Logger to automate formatting and other jobs
 """
 class _Logger:
 
-	def __init__(self, name, level):
+	def __init__(self, name, level, colorize):
 		self._configLogger(name, level)
+		self._colorize = colorize
 		self.debug("Logger initialized")
 		return
 
@@ -60,21 +62,33 @@ class _Logger:
 	Main logging functions
 	"""
 	def debug(self, message):
+		if self._colorize:
+			message = shell.output(message, shell.bold, shell.green)
 		self._logger.debug(message)
 
 	def info(self, message):
+		if self._colorize:
+			message = shell.output(message, shell.bold, shell.cyan)
 		self._logger.info(message)
 
 	def warning(self, message):
+		if self._colorize:
+			message = shell.output(message, shell.bold, shell.yellow)
 		self._logger.warning(message)
 
 	def warn(self, message):
+		if self._colorize:
+			message = shell.output(message, shell.bold, shell.yellow)
 		self._logger.warn(message)
 
 	def error(self, message):
+		if self._colorize:
+			message = shell.output(message, shell.bold, shell.red)
 		self._logger.error(message)
 	
 	def critical(self, message):
+		if self._colorize:
+			message = shell.output(message, shell.bold, shell.underline, shell.red)
 		self._logger.critical(message)
 
 	def shutdown(self):
@@ -87,9 +101,9 @@ class _Logger:
 
 _logger = None
 
-def initLogger(name, lvl = INFO):
+def initLogger(name, lvl = INFO, colorize = False):
 	global _logger
-	_logger = Logger(name, l)
+	_logger = Logger(name, l, colorize)
 	_logger.debug("eupy.native.logger.initLogger()")
 
 	return _logger
@@ -102,11 +116,11 @@ def getLogger():
 		_logger.debug("eupy.native.logger.getLogger()")
 		return _logger
 
-def initOrGetLogger(name = "", lvl = INFO):
+def initOrGetLogger(name = "", lvl = INFO, colorize = False):
 	global _logger
 	if _logger == None:
 		logging.warning("Logger has not been explicitly initialized")
-		_logger = _Logger(name, lvl)
+		_logger = _Logger(name, lvl, colorize)
 		_logger.debug("eupy.native.logger.initOrGetLogger()")
 		return _logger
 	else:
