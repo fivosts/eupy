@@ -96,9 +96,6 @@ class _Logger:
 		logging.shutdown()
 		return
 
-	def getLogger(self, name):
-		return self._logger
-
 _logger = None
 
 def initLogger(name, lvl = INFO, colorize = False):
