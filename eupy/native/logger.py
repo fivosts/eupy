@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import logging
+import argparse
 
 """
 Wrapper class over logging.Logger to automate formatting and other jobs
 """
-class Logger:
+class _Logger:
 
 	def __init__(self, name, level = logging.INFO):
 		self._configLogger(name, level)
@@ -31,7 +32,7 @@ class Logger:
 			self._logger.addHandler(ch)
 			self._logger.propagate = False
 			
-		self.debug("logger.Logger._configLogger()")
+		self.debug("logger._Logger._configLogger()")
 		return
 
 	@property
@@ -68,7 +69,7 @@ class Logger:
 		self._logger.critical(message)
 
 	def shutdown(self):
-		self.debug("eupy.native.logger.Logger.shutdown()")
+		self.debug("eupy.native.logger._Logger.shutdown()")
 		logging.shutdown()
 		return
 
@@ -78,6 +79,7 @@ class Logger:
 _logger = None
 
 def initLogger(name, lvl):
+
 	if lvl:
 		l = logging.DEBUG
 	else:
@@ -96,10 +98,10 @@ def getLogger():
 		_logger.debug("eupy.native.logger.getLogger()")
 		return _logger
 
-def initOrGetLogger():
+def initOrGetLogger(name = ""):
 	global _logger
 	if _logger == None:
-		_logger = Logger("Logger")
+		_logger = _Logger(name)
 		_logger.warning("Logger has not been explicitly initialized")
 		_logger.debug("eupy.native.logger.initOrGetLogger()")
 		return _logger
