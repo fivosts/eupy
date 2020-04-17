@@ -2,12 +2,19 @@
 import logging
 import argparse
 
+NOTSET = logging.NOTSET
+DEBUG = logging.DEBUG
+INFO = logging.INFO
+WARNING = logging.WARNING
+ERROR = logging.ERROR
+CRITICAL = logging.CRITICAL
+
 """
 Wrapper class over logging.Logger to automate formatting and other jobs
 """
 class _Logger:
 
-	def __init__(self, name, level = logging.INFO):
+	def __init__(self, name, level):
 		self._configLogger(name, level)
 		self.debug("Logger initialized")
 		return
@@ -78,14 +85,9 @@ class _Logger:
 
 _logger = None
 
-def initLogger(name, lvl):
-
-	if lvl:
-		l = logging.DEBUG
-	else:
-		l = logging.INFO
+def initLogger(name, lvl = INFO):
 	global _logger
-	_logger = Logger(name, level = l)
+	_logger = Logger(name, l)
 	_logger.debug("eupy.native.logger.initLogger()")
 
 	return _logger
@@ -98,10 +100,10 @@ def getLogger():
 		_logger.debug("eupy.native.logger.getLogger()")
 		return _logger
 
-def initOrGetLogger(name = ""):
+def initOrGetLogger(name = "", lvl = INFO):
 	global _logger
 	if _logger == None:
-		_logger = _Logger(name)
+		_logger = _Logger(name, lvl)
 		_logger.warning("Logger has not been explicitly initialized")
 		_logger.debug("eupy.native.logger.initOrGetLogger()")
 		return _logger
