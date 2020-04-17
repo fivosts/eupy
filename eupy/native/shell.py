@@ -56,7 +56,7 @@ def underline(string, callback = None):
 		string = callback[0](string, callback = [x for x in callback if x != callback[0]])
 	return "{}{}{}".format(UNDERLINE, string, END)
 
-def print(string, *args):
+def output(string, *args):
 	if args:
 		string = args[0](string, callback = [x for x in args if x != args[0]])
 	return string

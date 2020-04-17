@@ -16,8 +16,8 @@ Wrapper class over logging.Logger to automate formatting and other jobs
 class _Logger:
 
 	def __init__(self, name, level, colorize):
-		self._configLogger(name, level)
 		self._colorize = colorize
+		self._configLogger(name, level)
 		self.debug("Logger initialized")
 		return
 
@@ -100,7 +100,7 @@ _logger = None
 
 def initLogger(name, lvl = INFO, colorize = False):
 	global _logger
-	_logger = Logger(name, l, colorize)
+	_logger = _Logger(name, lvl, colorize)
 	_logger.debug("eupy.native.logger.initLogger()")
 
 	return _logger
