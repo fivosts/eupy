@@ -4,7 +4,7 @@
 from setuptools import setup
 
 setup(name = 'eupy',
-      version = '1.0.2',
+      version = '1.0.3',
       description = 'Python set of utils and libraries',
       url = 'http://github.com/fivosts/eupy',
       author = 'Foivos Tsimpourlas',

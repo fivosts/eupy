@@ -14,8 +14,9 @@ Wrapper class over logging.Logger to automate formatting and other jobs
 """
 class _Logger:
 
-	def __init__(self, name, level, colorize):
+	def __init__(self, name, level, colorize, step):
 		self._colorize = colorize
+		self._step = step
 		self._configLogger(name, level)
 		self.debug("Logger initialized")
 		return
@@ -60,10 +61,12 @@ class _Logger:
 	"""
 	Main logging functions
 	"""
-	def debug(self, message):
+	def debug(self, message, step = False):
 		if self._colorize:
 			message = shell.output(message, shell.bold, shell.green)
 		self._logger.debug(message)
+		if self._step or step:
+			input()
 
 	def info(self, message):
 		if self._colorize:
@@ -97,9 +100,9 @@ class _Logger:
 
 _logger = None
 
-def initLogger(name, lvl = INFO, colorize = False):
+def initLogger(name, lvl = INFO, colorize = False, step = False):
 	global _logger
-	_logger = _Logger(name, lvl, colorize)
+	_logger = _Logger(name, lvl, colorize, step)
 	_logger.debug("eupy.native.logger.initLogger()")
 
 	return _logger
@@ -112,11 +115,11 @@ def getLogger():
 		_logger.debug("eupy.native.logger.getLogger()")
 		return _logger
 
-def initOrGetLogger(name = "", lvl = INFO, colorize = False):
+def initOrGetLogger(name = "", lvl = INFO, colorize = False, step = False):
 	global _logger
 	if _logger == None:
 		logging.warning("Logger has not been explicitly initialized")
-		_logger = _Logger(name, lvl, colorize)
+		_logger = _Logger(name, lvl, colorize, step)
 		_logger.debug("eupy.native.logger.initOrGetLogger()")
 		return _logger
 	else:
