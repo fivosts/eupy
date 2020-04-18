@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import logging
-import shell
+from eupy.native import shell
 
 NOTSET = logging.NOTSET
 DEBUG = logging.DEBUG
