@@ -17,6 +17,7 @@ lxml==4.5.0
 matplotlib==3.2.1
 numpy==1.18.2
 pandas==1.0.3
+pathlib==1.0,1
 parsel==1.5.2
 protego==0.1.16
 pyOpenSSL==19.1.0
