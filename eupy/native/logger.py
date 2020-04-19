@@ -14,9 +14,10 @@ Wrapper class over logging.Logger to automate formatting and other jobs
 """
 class _Logger:
 
-	def __init__(self, name, level, colorize, step):
+	def __init__(self, name, level, colorize, step, self_debug):
 		self._colorize = colorize
 		self._step = step
+		self._self_debug = self_debug
 		self._configLogger(name, level)
 		self.debug("Logger initialized")
 		return
@@ -41,8 +42,8 @@ class _Logger:
 		if not self._logger.handlers:
 			self._logger.addHandler(ch)
 			self._logger.propagate = False
-			
-		self.debug("logger._Logger._configLogger()")
+		if self.self_debug:
+			self.debug("logger._Logger._configLogger()")
 		self.info("Logger has been initialized")
 		return
 
@@ -57,7 +58,11 @@ class _Logger:
 	@property
 	def level(self):
 		return logging.getLevelName(self._logger.level)
-	
+
+	@property
+	def self_debug(self):
+		return logging.getLevelName(self._logger._self_debug)
+
 	@property
 	def enable_step(self):
 		self._step = True
@@ -102,17 +107,18 @@ class _Logger:
 		self._logger.critical(message)
 
 	def shutdown(self):
-		self.debug("eupy.native.logger._Logger.shutdown()")
+		if self.self_debug:
+			self.debug("eupy.native.logger._Logger.shutdown()")
 		logging.shutdown()
 		return
 
 _logger = None
 
-def initLogger(name, lvl = INFO, colorize = False, step = False):
+def initLogger(name, lvl = INFO, colorize = False, step = False, self_debug = False):
 	global _logger
-	_logger = _Logger(name, lvl, colorize, step)
-	_logger.debug("eupy.native.logger.initLogger()")
-
+	_logger = _Logger(name, lvl, colorize, step, self_debug)
+	if _logger.self_debug:
+		_logger.debug("eupy.native.logger.initLogger()")
 	return _logger
 
 def getLogger():
@@ -120,16 +126,19 @@ def getLogger():
 	if _logger == None:
 		raise NameError("Logger has not been initialized!")
 	else:
-		_logger.debug("eupy.native.logger.getLogger()")
+		if _logger.self_debug:
+			_logger.debug("eupy.native.logger.getLogger()")
 		return _logger
 
-def initOrGetLogger(name = "", lvl = INFO, colorize = False, step = False):
+def initOrGetLogger(name = "", lvl = INFO, colorize = False, step = False, self_debug = False):
 	global _logger
 	if _logger == None:
 		logging.warning("Logger has not been explicitly initialized")
-		_logger = _Logger(name, lvl, colorize, step)
-		_logger.debug("eupy.native.logger.initOrGetLogger()")
+		_logger = _Logger(name, lvl, colorize, step, self_debug)
+		if _logger.self_debug:
+			_logger.debug("eupy.native.logger.initOrGetLogger()")
 		return _logger
 	else:
-		_logger.debug("eupy.native.logger.initOrGetLogger()")
+		if _logger.self_debug:
+			_logger.debug("eupy.native.logger.initOrGetLogger()")
 		return _logger
