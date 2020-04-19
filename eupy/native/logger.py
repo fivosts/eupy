@@ -19,7 +19,8 @@ class _Logger:
 		self._step = step
 		self._self_debug = self_debug
 		self._configLogger(name, level)
-		self.debug("Logger initialized")
+		if self.self_debug:
+			self.debug("Logger initialized")
 		return
 
 	def _configLogger(self, name, level):
@@ -61,7 +62,7 @@ class _Logger:
 
 	@property
 	def self_debug(self):
-		return logging.getLevelName(self._self_debug)
+		return self._self_debug
 
 	@property
 	def enable_step(self):
