@@ -58,6 +58,14 @@ class _Logger:
 	def level(self):
 		return logging.getLevelName(self._logger.level)
 	
+	@property
+	def enable_step(self):
+		self._step = True
+
+	@property
+	def disable_step(self):
+		self._step = False
+
 	"""
 	Main logging functions
 	"""
