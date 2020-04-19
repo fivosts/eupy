@@ -61,7 +61,7 @@ class _Logger:
 
 	@property
 	def self_debug(self):
-		return logging.getLevelName(self._logger._self_debug)
+		return logging.getLevelName(self._self_debug)
 
 	@property
 	def enable_step(self):
