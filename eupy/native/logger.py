@@ -78,7 +78,7 @@ class _Logger:
 	def debug(self, message, step = False):
 		if self._colorize:
 			message = shell.output(message, shell.bold, shell.green)
-		if self.level >= DEBUG:
+		if self._logger.level >= DEBUG:
 			self._logger.debug(message)
 			if self._step or step:
 				input()
