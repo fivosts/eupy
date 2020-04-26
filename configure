@@ -1,0 +1,100 @@
+#!/bin/bash
+
+function help()
+{
+    # echo "Usage: ./configure [OPTIONS]"
+    # echo ""
+    # echo "  -h, --help"
+    # echo "              Print help message"
+    # echo ""
+    # echo "CMake Build options:"
+    # echo ""
+    # echo "  -SC, --SCDBG"
+    # echo "              Enable scanner debug tracing"
+    # echo "  -T, --TOKDBG"
+    # echo "              Enable tokenizer debug tracing"
+    # echo "  -L, --LEXDBG"
+    # echo "              Enable lexer debug tracing"
+    # echo "  -P, --PARDBG"
+    # echo "              Enable parser debug tracing"
+    # echo "  -S, --SEMDBG"
+    # echo "              Enable semantic analyzer debug tracing"
+    # echo "  -C, --CODEDBG"
+    # echo "              Enable code generator debug tracing"
+    # echo ""
+    # echo "Build options:"
+    # echo ""
+    # echo "  -clean"
+    # echo "              Delete build folder to clean compile"
+    # echo ""
+    # echo "Compiler options:"
+    # echo ""
+    # echo "  -gcc"
+    # echo "              Use GCC to build project (Default option)"
+    # echo "  -clang"
+    # echo "              Use Clang to build project"
+    # echo "  -llvm"
+    # echo "              Use Clang/LLVM-IR to build project"
+    # echo ""
+    # echo "If no argument is provided, cmake is invoked with"
+    # echo "all preprocessor flags set to off by default."
+    # echo ""
+    # echo "@author: Foivos Tsimpourlas"
+    # echo "@webpage: <https://github.com/fivosts/Mlang>"
+    exit $1
+}
+
+function parse_arguments()
+{
+    for arg in "${ARGS[@]}"; do
+    case "$arg" in
+        -h|--help)
+            help 0
+            ;;
+	    -uv|--update_version)
+			update_pypi
+	        ;;
+   #      -d|--develop_build)
+			# build_develop
+   #          ;;
+        *)
+            echo "configure: Unrecognized option " $arg
+            help 1
+            ;;
+    esac
+    done
+}
+
+
+function update_pypi()
+{
+	source string # http://github.com/fivosts/linuxTools.git dependency
+
+	while IFS= read -r line; do
+		if [[ $line == *"version"* ]]; then
+			dot="."
+			endpart="',"
+			oldpart=$(rmSuffix "$line" "$dot")
+			lastbit=$(rmfullSuffix $(rmfullPrefix "$line" "$dot") "$endpart")
+			let lastbit+=1
+			line="${oldpart}${dot}${lastbit}${endpart}"
+		fi
+		inp_file+=("$line")
+	done < "setup.py"
+
+	printf "%s\n" "${inp_file[@]}" > setup.py
+
+	rm ./dist/*
+	python setup.py sdist --format=zip
+	twine upload dist/*
+
+	exit 0
+}
+
+# function build_develop()
+# {
+# 	python setup.py develop --install-dir develop/
+# }
+
+declare -a ARGS=("$@")
+parse_arguments
