@@ -1,1 +1,1 @@
-__all__ = ['logger', 'plotter', 'shell']
+__all__ = ['logger', 'plotter', 'profiler', 'shell']
