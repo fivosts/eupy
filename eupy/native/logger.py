@@ -80,7 +80,10 @@ class _Logger:
 			message = shell.output(message, shell.bold, shell.green)
 		self._logger.debug(message)
 		if self._logger.level == DEBUG and (self._step or step):
-			input()
+			try:
+				input()
+			except EOFError as e:
+				self.warning(e)
 
 	def info(self, message):
 		if self._colorize:
