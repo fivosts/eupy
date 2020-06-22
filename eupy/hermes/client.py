@@ -7,34 +7,36 @@ from time import sleep
 import smtplib, ssl, imaplib, email
 import subprocess, os
 from getpass import getpass, getuser
+import socket
 
 class gmail:
 
-  __port = 465
-  __smtp_server = "smtp.gmail.com"
-  __cachePath = "{}/.config/hermes".format(str(Path.home()))
-  __cacheFile = "pass.txt"
+  _port = 465
+  _smtp_server = "smtp.gmail.com"
+  _hostname    = socket.gethostname()
+  _cachePath   = "{}/.config/hermes".format(str(Path.home()))
+  _cacheFile   = "pass.txt"
 
-  def _init__(this, receiver, cred=[], cache=True):
+  def __init__(self, receiver, cred=[], cache=True):
     
-    this.__setup(cred, receiver, cache)
+    self._setup(cred, receiver, cache)
     return
 
   ## Init handler to set up credential and receiver information
-  def _setup(this, cred, receiver, cache):
+  def _setup(self, cred, receiver, cache):
 
     assert receiver != "", "Receiver mail field is empty"
-    cach_creds = this.__searchCacheOrUpdate(cred, cache)
-    this.__username, this.__password = cach_creds[0], cach_creds[1]
-    this.__receiver = receiver
+    cach_creds = self._searchCacheOrUpdate(cred, cache)
+    self._username, self._password = cach_creds[0], cach_creds[1]
+    self._receiver = receiver
     return
 
   ## Search cache for existing credentials. If found, check if newer are given
-  def _searchCacheOrUpdate(this, cred, cache):
+  def _searchCacheOrUpdate(self, cred, cache):
     creds = []
     ## If credentials are found in cache get them
-    if os.path.isfile("{}/{}".format(this.__cachePath, this.__cacheFile)):
-      with open("{}/{}".format(this.__cachePath, this.__cacheFile), 'r') as pf:
+    if os.path.isfile("{}/{}".format(self._cachePath, self._cacheFile)):
+      with open("{}/{}".format(self._cachePath, self._cacheFile), 'r') as pf:
         creds = pf.read().splitlines()
         assert len(creds) == 2, "Cached credentials have wrong format!"
         assert creds[0] != "" and creds[1] != "", "Username or password field is empty"
@@ -43,7 +45,7 @@ class gmail:
         creds = cred
         ## Write to cache, if instructed
         if cache:
-          this.__writeCache(creds)
+          self._writeCache(creds)
     ## Otherwise use the given ones, if given
     else:
       # assert len(cred) == 2, "Format of input tuple for username/password is incorrect"
@@ -52,61 +54,61 @@ class gmail:
       creds.append(str(getpass("Password: ")))
       ## Write to cache, if instructed
       if cache:
-        this.__writeCache(creds)
+        self._writeCache(creds)
     return creds
 
   ## Update mail credentials to cache
-  def _writeCache(this, cred):
-    if not os.path.isdir(this.__cachePath):
-      os.makedirs(this.__cachePath)
-    with open("{}/{}".format(this.__cachePath, this.__cacheFile), 'w') as pf:
+  def _writeCache(self, cred):
+    if not os.path.isdir(self._cachePath):
+      os.makedirs(self._cachePath)
+    with open("{}/{}".format(self._cachePath, self._cacheFile), 'w') as pf:
       pf.write("\n".join(cred))
     return
 
-  ## Return username allocated to this object
-  def user(this):
-    return this.__username
+  ## Return username allocated to self object
+  def user(self):
+    return self._username
 
   ## Core function to broadcast a message to receiver
-  def broadcast(this, reporting_module, msg, request_reply = False):
+  def broadcast(self, reporting_module, msg, request_reply = False):
 
-    if this.__password == "":
-      assert False, "SMTP Server password for {} not specified!".format(this.__username)
+    if self._password == "":
+      assert False, "SMTP Server password for {} not specified!".format(self._username)
 
-    message = this.__generate_message(reporting_module, msg)
-    this.__send_message(message)
+    message = self._generate_message(reporting_module, msg)
+    self._send_message(message)
 
     if request_reply:
-      this.__mailbox_check_wait(message)
-      cmd = this.__receive_instruction()
-      this.__execute_instructions(cmd)
+      self._mailbox_check_wait(message)
+      cmd = self._receive_instruction()
+      self._execute_instructions(cmd)
       return cmd
 
     return
 
   ## MIME message constructor
-  def _generate_message(this, rm, m):
-    message = MIMEText("Error Reported:\n\n---------------------------------------\n{}\n---------------------------------------\n\nError reported by mail agent".format(m))
-    message['Subject'] = "{}".format(rm)
-    message['From'] = this.__username
-    message['To'] = this.__receiver
+  def _generate_message(self, rm, m):
+    message = MIMEText("---------------------------------------\n{}\n---------------------------------------\n\nReported by mail agent".format(m))
+    message['Subject'] = "{}:{}".format(self._hostname, rm)
+    message['From'] = self._username
+    message['To'] = self._receiver
     message['Sent'] = str(datetime.now())
     return message
 
   ## Login to smtp server using credentials and send message
-  def _send_message(this, message):
+  def _send_message(self, message):
 
     context = ssl.create_default_context()
-    with smtplib.SMTP_SSL(this.__smtp_server, this.__port, context=context) as server:
-      server.login(this.__username, this.__password)
-      server.sendmail(this.__username, this.__receiver, message.as_string())
+    with smtplib.SMTP_SSL(self._smtp_server, self._port, context=context) as server:
+      server.login(self._username, self._password)
+      server.sendmail(self._username, self._receiver, message.as_string())
     return
 
   ## Fetch mail, extract the body of the message and parse the instruction given
-  def _receive_instruction(this):
+  def _receive_instruction(self):
 
-    r, d = this.__fetch_mail(encoding = "(UID BODY[TEXT])")
-    msg = this.__extract_email(d).as_string().split('\n')
+    r, d = self._fetch_mail(encoding = "(UID BODY[TEXT])")
+    msg = self._extract_email(d).as_string().split('\n')
     command = []
 
     for line in msg:
@@ -119,7 +121,7 @@ class gmail:
     return command
 
   ## Simple routine to execute in bash the instruction given
-  def _execute_instructions(this, cmd):
+  def _execute_instructions(self, cmd):
 
     for c in cmd:
       proc = subprocess.Popen(c, stdout=subprocess.PIPE)
@@ -129,23 +131,23 @@ class gmail:
     return
 
   ## Busy waiting for a reply from a specific recipient
-  def _mailbox_check_wait(this, message):
+  def _mailbox_check_wait(self, message):
 
-    r, d = this.__fetch_mail()
-    msg = this.__extract_email(d)
+    r, d = self._fetch_mail()
+    msg = self._extract_email(d)
 
     ## TODO add time too
     while not (message['Subject'] in msg['Subject'] and message['To'] in msg['From']):   
       sleep(10)
-      r, d = this.__fetch_mail()
-      msg = this.__extract_email(d)
+      r, d = self._fetch_mail()
+      msg = self._extract_email(d)
     return
 
   ## Login to mailbox and fetch the latest email
-  def _fetch_mail(this, encoding = "(RFC822)"):
+  def _fetch_mail(self, encoding = "(RFC822)"):
 
     mail = imaplib.IMAP4_SSL('imap.gmail.com')
-    mail.login(this.__username, this.__password)
+    mail.login(self._username, self._password)
     mail.list()
 
     # Out: list of "folders" aka labels in gmail.
@@ -158,7 +160,7 @@ class gmail:
     return result, data
 
   ## Extract the core message from raw mail data
-  def _extract_email(this, data):
+  def _extract_email(self, data):
 
     for response_part in data:
       if isinstance(response_part, tuple):
