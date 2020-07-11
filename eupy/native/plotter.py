@@ -151,6 +151,7 @@ cnames = [
 
 _cached_fig = None
 _cached_ax = None
+_global_used_colors = set()
 
 def _clearCache():
     global _cached_ax, _cached_fig
@@ -220,13 +221,14 @@ def linesSingleAxis(datapoints,
 
 ## Picks a random color from stack unless it is already used
 def _popColor(used_colors):
-
+    global _global_used_colors
     rngen = random.Random(10)
     c = rngen.randint(0, len(cnames))
     attempts = 1
-    while c in used_colors and attempts < 2 * len(cnames):
+    while c in used_colors and c in _global_used_colors and attempts < 2 * len(cnames):
         c = rngen.randint(0, len(cnames))
         attempts += 1
+    _global_used_colors.add(c)
     return c
 
 ## Core plotting line.
