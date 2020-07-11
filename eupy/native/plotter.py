@@ -3,6 +3,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import random
 from random import choice
 # from collections import OrderedDict
 ## TODO add logger
@@ -220,11 +221,13 @@ def linesSingleAxis(datapoints,
 ## Picks a random color from stack unless it is already used
 def _popColor(used_colors):
 
-    for c in cnames:
-        if c not in used_colors:
-            return c
-    ## LOG here that no color was found
-    return None
+    rngen = random.Random(10)
+    c = rngen.randint(0, len(cnames))
+    attempts = 1
+    while c in used_colors and attempts < 2 * len(cnames):
+        c = rngen.randint(0, len(cnames))
+        attempts += 1
+    return c
 
 ## Core plotting line.
 ## Will be reused by all line config functions
