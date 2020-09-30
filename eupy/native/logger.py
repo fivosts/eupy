@@ -60,6 +60,12 @@ class _Logger:
 	def level(self):
 		return logging.getLevelName(self._logger.level)
 
+	@level.setter
+	def level(self, lvl):
+		self.logger.setLevel(lvl)
+		self.handlers[0].setLevel(lvl)
+		return
+
 	@property
 	def self_debug(self):
 		return self._self_debug
