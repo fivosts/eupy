@@ -149,15 +149,7 @@ cnames = [
 'yellowgreen'
 ]
 
-_cached_fig = None
-_cached_ax = None
 _global_used_colors = set()
-
-def _clearCache():
-    global _cached_ax, _cached_fig
-    _cached_ax = None
-    _cached_fig = None
-    return
 
 ## Generic function. Plot multiple lines over the same x and y axis
 ## datapoints format: {'name': {'y': [], 'x'(optional): [], 'color': .... etc. }}
@@ -177,14 +169,12 @@ def linesSingleAxis(datapoints,
                     live = False,
                     force_init = False,
                     ):
-    global _cached_fig, _cached_ax
-    ## TODO trigger partial config if x_lim, y_lim or grid are different
-    if (not _cached_fig and not _cached_ax) or force_init:
-        _cached_fig, _cached_ax = _configSubplot(figsize, plot_title,
-                                                 legend,
-                                                 vert_grid, hor_grid,
-                                                 x_label, y_label,
-                                                 x_lim, y_lim)
+
+    fig, ax = _configSubplot(figsize, plot_title,
+                             legend,
+                             vert_grid, hor_grid,
+                             x_label, y_label,
+                             x_lim, y_lim)
 
     ## Keep history of used colors
     used_colors = set()
@@ -216,7 +206,8 @@ def linesSingleAxis(datapoints,
         plt.pause(0.1)
     else:
         show(savefig, showfig)
-
+    fig.clear()
+    plt.close(fig)
     return
 
 ## Picks a random color from stack unless it is already used
