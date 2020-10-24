@@ -195,7 +195,7 @@ def linesSingleAxis(datapoints,
             color = _popColor(used_colors)
         used_colors.add(color)
 
-        _plotLine(_ax, x, y, color, line_name)
+        _plotLine(ax, x, y, color, line_name)
 
     if legend:
         handles, labels = plt.gca().get_legend_handles_labels()
